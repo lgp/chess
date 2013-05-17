@@ -1,4 +1,4 @@
-chess
-=====
+LGP Chess
+=========
 
-LGPosse chess, built in Javascript.
+A multiplayer chess game built in Javascript.

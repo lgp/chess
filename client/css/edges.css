@@ -1,0 +1,22 @@
+.piece {
+	display:inline-block;
+	width:70px;
+}
+
+.sprite {
+	margin: 0 auto;
+	background: url("../img/pieces/edges/edges.png") no-repeat top left;
+}
+
+.bishopDark{ background-position: 0 0; width: 40px; height: 92px; } 
+.bishopLight{ background-position: 0 -97px; width: 40px; height: 92px; } 
+.kingDark{ background-position: 0 -194px; width: 40px; height: 97px; } 
+.kingLight{ background-position: 0 -296px; width: 40px; height: 97px; } 
+.knightDark{ background-position: 0 -398px; width: 40px; height: 83px; } 
+.knightLight{ background-position: 0 -486px; width: 40px; height: 83px; } 
+.pawnDark{ background-position: 0 -574px; width: 40px; height: 67px; } 
+.pawnLight{ background-position: 0 -646px; width: 40px; height: 67px; } 
+.queenDark{ background-position: 0 -718px; width: 40px; height: 94px; } 
+.queenLight{ background-position: 0 -817px; width: 40px; height: 94px; } 
+.rookDark{ background-position: 0 -916px; width: 40px; height: 76px; } 
+.rookLight{ background-position: 0 -997px; width: 40px; height: 76px; } 

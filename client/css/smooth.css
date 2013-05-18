@@ -1,0 +1,80 @@
+.piece {
+	display:inline-block;
+	width:70px;
+}
+
+.sprite {
+	margin: 0 auto;
+}
+
+.pawnDark {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat 0 -80px;
+	width: 49px;
+	height: 88px;
+}
+
+.pawnLight {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -3px -265px;
+	width: 50px;
+	height: 89px;
+}
+
+.rookDark {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -65px -56px;
+	width: 67px;
+	height: 113px;
+}
+
+.rookLight {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -69px -242px;
+	width: 67px;
+	height: 113px;
+}
+
+.bishopDark {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -178px -25px;
+	width: 54px;
+	height: 146px;
+}
+
+.bishopLight {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -182px -211px;
+	width: 53px;
+	height: 146px;
+}
+
+.knightDark {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -255px -56px;
+	width: 62px;
+	height: 115px;
+}
+
+.knightLight {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -258px -242px;
+	width: 63px;
+	height: 115px;
+}
+
+.kingDark {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -352px -4px;
+	width: 54px;
+	height: 167px;
+}
+
+.kingLight {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -356px -190px;
+	width: 54px;
+	height: 167px;
+}
+
+.queenDark {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -427px 0;
+	width: 65px;
+	height: 171px;
+}
+
+.queenLight {
+	background: url('../img/pieces/smooth/smooth.png') no-repeat -430px -185px;
+	width: 65px;
+	height: 172px;
+}

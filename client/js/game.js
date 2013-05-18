@@ -3,6 +3,8 @@ var bgTileLayer;
 var pieceLayer;
 var fgTileLayer;
 
+var white;
+
 
 
 /*
@@ -44,7 +46,63 @@ function initPage() {
 	
 */
 function drawBoard(board) {
+	for (i in board) {
+		for (j in board[i]) {
+			
+		}
+	}
+	stage.draw();
+}
+
+/*
+	Function: drawbgTile
 	
+	Draws background tiles.
+	
+	Paramaters:
+	
+		x - X coordinate (0-7) of tile
+		y - Y coordinate (0-7) of tile
+*/
+function drawbgTile(x,y) {
+}
+
+/*
+	Function: drawPiece
+	
+	Draws pieces.
+	
+	Paramaters:
+	
+		x - X coordinate (0-7) of tile
+		y - Y coordinate (0-7) of tile
+		id - ID of piece (color(b,w), piece ID(r,h,k,p,b,q))
+*/
+function drawPiece(x,y,id) {
+}
+
+/*
+	Function: drawfgTile
+	
+	Draws foreground tiles.
+	
+	Paramaters:
+	
+		x - X coordinate (0-7) of tile
+		y - Y coordinate (0-7) of tile
+*/
+function drawfgTile(x,y) {
+}
+
+/*
+	Function: clearBoard
+	
+	Clears all the layers so that the board can be redrawn
+*/
+function clearBoard() {
+	bgTileLayer.removeChildren();
+	pieceLayer.removeChildren();
+	fgTileLayer.removeChildren();
 }
 
 $(document).ready(function() {

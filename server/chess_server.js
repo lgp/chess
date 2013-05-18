@@ -2,6 +2,8 @@ var io = require('socket.io');
 
 
 function Room() {
+	this.colors = ['black', 'white'];
+	this.turn = 'white';
 	this.board = [][];
 	this.locboard = [][];
 	for(var i=0; i<8; i++)
@@ -57,6 +59,8 @@ function Room() {
 		this.locboard[newl.x][newl.y] = this.locboard[oldl.x][oldl.y];
 		this.board[oldl.x][oldl.y] === 'e';
 		this.locboard[oldl.x][oldl.y] === 'e';
+		if(this.turn === 'white') this.turn = 'black';
+		else this.turn = 'white';
 	}
 	this.getBlack = function() {
 		var blackmoves = [];
@@ -268,17 +272,47 @@ function Piece(type, initloc) {
 					if(room.locboard[i-1][j+1].color === 'w') this.validmoves.push({x:i-1, y:j+1});
 				}
 				break;
+			case 'wk':
+				var badmoves = room.getBlack();
+				if((room.locboard[x+1][y] === 'e' || room.locboard[x+1][y].color === 'b') && badmoves.indexOf({x+1, y}) === -1)
+					this.validmoves.push({x:x+1, y:y});
+				if((room.locboard[x-1][y] === 'e' || room.locboard[x-1][y].color === 'b') && badmoves.indexOf({x-1, y}) === -1)
+					this.validmoves.push({x:x-1, y:y});
+				if((room.locboard[x][y+1] === 'e' || room.locboard[x][y+1].color === 'b') && badmoves.indexOf({x, y+1}) === -1)
+					this.validmoves.push({x:x, y:y+1});
+				if((room.locboard[x][y-1] === 'e' || room.locboard[x][y-1].color === 'b') && badmoves.indexOf({x, y-1}) === -1)
+					this.validmoves.push({x:x, y:y-1});
+				break;
+			case 'bk':
+				var badmoves = room.getBlack();
+				if((room.locboard[x+1][y] === 'e' || room.locboard[x+1][y].color === 'w') && badmoves.indexOf({x+1, y}) === -1)
+					this.validmoves.push({x:x+1, y:y});
+				if((room.locboard[x-1][y] === 'e' || room.locboard[x-1][y].color === 'w') && badmoves.indexOf({x-1, y}) === -1)
+					this.validmoves.push({x:x-1, y:y});
+				if((room.locboard[x][y+1] === 'e' || room.locboard[x][y+1].color === 'w') && badmoves.indexOf({x, y+1}) === -1)
+					this.validmoves.push({x:x, y:y+1});
+				if((room.locboard[x][y-1] === 'e' || room.locboard[x][y-1].color === 'w') && badmoves.indexOf({x, y-1}) === -1)
+					this.validmoves.push({x:x, y:y-1});
+				break;
 		}
 		return this.validmoves;
 	}
 }
 
 io.on('connection', function(socket) {
-	socket.on('info', function(data){
-	
-	});
+	if(room.colors.length == 0) socket.disconnect();
+	socket.set('color', room.colors.pop(), function(){});
 	
 	socket.on('move', function(data) {
-		
+		var fx = data.from.x, fy = data.from.y;
+		socket.get('color', function(err, color) {
+			if(color === room.turn) {
+				var moves = room.locboard[fx][fy].getMoves();
+				if(moves.indexOf(data.to) === -1) room.move(data.from, data.to);
+				else socket.emit('bad move');
+			}
+			else socket.emit('bad move');
+			io.sockets.emit('update', room.board);
+		});
 	});
 });

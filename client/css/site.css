@@ -1,0 +1,23 @@
+/*
+	LGP Chess
+	Site stylesheet
+	Lunch Group Posse, 2013
+*/
+
+body {
+	background-color: #eee;
+	background-image: url("../img/site/back.png");
+}
+
+#logo {
+	margin: 0 auto;
+	text-align:center;
+}
+
+#container {
+	width: 640px;
+	background: white;
+	border-radius:4px;
+	border: 4px black double;
+	margin: 0 auto;
+}

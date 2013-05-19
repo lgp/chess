@@ -1,0 +1,1 @@
+./NaturalDocs/NaturalDocs -i ../server -o html ../docs/server/html -p ../docs/server/data

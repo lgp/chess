@@ -169,12 +169,21 @@ function drawPiece(i,j,x,y,piece) {
 			break;
 	}
 	if (piece != 'ee') {
+		if (newImg.width > newImg.height) {
+			newImg.divisor = newImg.width/tileSize;
+		} else if (newImg.width < newImg.height) {
+			newImg.divisor = newImg.height/tileSize;
+		}
+		var width = newImg.width/newImg.divisor;
+		var height = newImg.height/newImg.divisor;
+		var xOff = Math.floor(tileSize/2) - Math.floor(width/2);
+		var yOff = Math.floor(tileSize/2) - Math.floor(height/2);
 		var newImg = new Kinetic.Image({
 			image: newImg,
-			x:x,
-			y:y,
-			height:tileSize,
-			width:tileSize
+			x:x + xOff,
+			y:y + yOff,
+			height:height,
+			width:width
 		});
 		newImg.id = String(i) + String(j);
 		pieceLayer.add(newImg);
@@ -205,7 +214,7 @@ function drawFGTile(i,j,x,y,piece) {
 	});
 	newRect.id = String(i) + String(j);
 	newRect.i = i;
-	newrect.j = j;
+	newRect.j = j;
 	newRect.piece = piece;
 	newRect.on('click', function() {
 		move(this.i, this.j, this.piece);
@@ -236,6 +245,7 @@ function clearBoard() {
 		piece - ID of piece (color(b,w), piece ID(r,h,k,p,b,q))
 */
 function move(i,j,piece) {
+	console.log(i,j,piece);
 	if (piece.charAt(0) == 'b' && isWhite || piece.charAt(0) == 'w' && !isWhite) {
 		return;
 	}

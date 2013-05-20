@@ -21,3 +21,9 @@ body {
 	border: 4px black double;
 	margin: 0 auto;
 }
+
+#facebook {
+	position:absolute;
+	top:5px;
+	right:5px;
+}

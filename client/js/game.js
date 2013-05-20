@@ -32,6 +32,8 @@ function initPage() {
 	stage.add(bgTileLayer);
 	stage.add(pieceLayer);
 	stage.add(fgTileLayer);
+	
+	connect('localhost', '8080');
 }
 
 /*
@@ -46,25 +48,60 @@ function initPage() {
 	
 */
 function drawBoard(board) {
+	console.log('drawing board...');
 	for (i in board) {
 		for (j in board[i]) {
-			
+			drawTile(i, j, i*120, j*120, board[i][j]);
 		}
 	}
 	stage.draw();
 }
 
 /*
-	Function: drawbgTile
+	Function: drawTile
 	
-	Draws background tiles.
+	Draws an individual tile.
 	
 	Paramaters:
-	
-		x - X coordinate (0-7) of tile
-		y - Y coordinate (0-7) of tile
+		
+		i - I iterator of array
+		j - J iterator of array
+		x - X coordinate
+		y - Y coordiante
+		piece - ID of piece
 */
-function drawbgTile(x,y) {
+function drawTile(i,j,x,y,piece) {
+	drawBGTile(i,j,x,y);
+}
+
+/*
+	
+*/
+function drawBGTile(i,j,x,y) {
+	var bgcolor;
+	if (j%2 == 0) {
+		if (i%2 == 0) {
+			bgcolor = '#BFBFBF';
+		} else {
+			bgcolor = '#FFFFFF';
+		}
+	} else {
+		if (i%2 == 0) {
+			bgcolor = '#FFFFFF';
+		} else {
+			bgcolor = '#BFBFBF'
+		}
+	}
+	var id = String(i) + String(j);
+	
+	var newRect = new Kinetic.Rect({
+		width: x/i,
+		height: y/j,
+		x: x,
+		y: y,
+		fill: bgcolor
+	});
+	bgTileLayer.add(newRect);
 }
 
 /*
@@ -82,7 +119,7 @@ function drawPiece(x,y,id) {
 }
 
 /*
-	Function: drawfgTile
+	Function: drawFGTile
 	
 	Draws foreground tiles.
 	
@@ -91,7 +128,7 @@ function drawPiece(x,y,id) {
 		x - X coordinate (0-7) of tile
 		y - Y coordinate (0-7) of tile
 */
-function drawfgTile(x,y) {
+function drawFGTile(x,y) {
 }
 
 /*
@@ -158,6 +195,10 @@ function listeners() {
 	});
 }
 
-$(document).ready(function() {
+function loader() {
+	
+}
+
+window.onload = function() {
 	initPage();
-});
+};

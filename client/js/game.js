@@ -83,7 +83,7 @@ function drawBoard(board) {
 function drawTile(i,j,x,y,piece) {
 	drawBGTile(i,j,x,y);
 	drawPiece(i,j,x,y,piece);
-	drawFGTile(i,j,x,y);
+	drawFGTile(i,j,x,y,piece);
 }
 
 /*
@@ -192,9 +192,9 @@ function drawPiece(i,j,x,y,piece) {
 		j - J iterator of array
 		x - X coordinate (0-7) of tile
 		y - Y coordinate (0-7) of tile
-		id - ID of piece (color(b,w), piece ID(r,h,k,p,b,q))
+		piece - ID of piece (color(b,w), piece ID(r,h,k,p,b,q))
 */
-function drawFGTile(i,j,x,y) {
+function drawFGTile(i,j,x,y,piece) {
 	var newRect = new Kinetic.Rect({
 		width:tileSize,
 		height: tileSize,
@@ -204,6 +204,12 @@ function drawFGTile(i,j,x,y) {
 		stroke: 'black'
 	});
 	newRect.id = String(i) + String(j);
+	newRect.i = i;
+	newrect.j = j;
+	newRect.piece = piece;
+	newRect.on('click', function() {
+		move(this.i, this.j, this.piece);
+	});
 	fgTileLayer.add(newRect);
 }
 
@@ -216,6 +222,132 @@ function clearBoard() {
 	bgTileLayer.removeChildren();
 	pieceLayer.removeChildren();
 	fgTileLayer.removeChildren();
+}
+
+/*
+	Function: move
+	
+	Handles the moving of pieces.
+	
+	Paramaters:
+	
+		i - I iterator of array
+		j - J iterator of array
+		piece - ID of piece (color(b,w), piece ID(r,h,k,p,b,q))
+*/
+function move(i,j,piece) {
+	if (piece.charAt(0) == 'b' && isWhite || piece.charAt(0) == 'w' && !isWhite) {
+		return;
+	}
+	switch(piece.charAt(1)) {
+		case 'b':
+			case 'b':
+			highlightBishop(i,j);
+			break;
+		case 'h':
+			highlightKnight(i,j);
+			break;
+		case 'k':
+			highlightKing(i,j);
+			break;
+		case 'p':
+			highlightPawn(i,j);
+			break;
+		case 'q':
+			highlightQueen(i,j);
+			break;
+		case 'r':
+			highlightRook(i,j);
+			break;
+	}
+}
+
+/*
+	Function: highlightBishop
+	
+	Highlights squares for bishop movement.
+	
+	Paramaters:
+		i - I iterator of array
+		j - J iterator of array
+*/
+function highlightBishop(i,j) {
+	
+}
+
+/*
+	Function: highlightKing
+	
+	Highlights squares for king movement.
+	
+	Paramaters:
+		i - I iterator of array
+		j - J iterator of array
+*/
+function highlightKing(i,j) {
+	
+}
+
+/*
+	Function: highlightKnight
+	
+	Highlights squares for knight movement.
+	
+	Paramaters:
+		i - I iterator of array
+		j - J iterator of array
+*/
+function highlightKnight(i,j) {
+	
+}
+
+/*
+	Function: highlightPawn
+	
+	Highlights squares for pawn movement.
+	
+	Paramaters:
+		i - I iterator of array
+		j - J iterator of array
+*/
+function highlightPawn(i,j) {
+	
+}
+
+/*
+	Function: highlightQueen
+	
+	Highlights squares for queen movement.
+	
+	Paramaters:
+		i - I iterator of array
+		j - J iterator of array
+*/
+function highlightQueen(i,j) {
+	
+}
+
+/*
+	Function: highlightRook
+	
+	Highlights squares for rook movement.
+	
+	Paramaters:
+		i - I iterator of array
+		j - J iterator of array
+*/
+function highlightRook(i,j) {
+	
+}
+
+/*
+	Function: resetHighlight
+*/
+function resetHighlight() {
+	for (i in fgTileLayer.children) {
+		fgTileLayer.children[i].fill = 'rgba(0,0,0,0)';
+	}
+	fgTileLayer.draw();
 }
 
 /*

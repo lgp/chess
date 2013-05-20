@@ -96,11 +96,13 @@ function Piece(type, initloc) {
 	this.color = type.substring(0,1);
 	this.loc = initloc;
 	this.validmoves = [];
+	this.hasMoved = false;
 	this.move = function(newloc) {
 		this.getMoves();
-		if(this.validmoves.conatins(newloc)) {
+		if(this.validmoves.indexOf(newloc) !== -1) {
 			room.move(loc, newloc);
 			this.loc = newloc;
+			this.hasMoved = true;
 			this.getMoves();
 			return true;
 		}
@@ -319,8 +321,7 @@ io.on('connection', function(socket) {
 		var fx = data.from.x, fy = data.from.y;
 		socket.get('color', function(err, color) {
 			if(color === room.turn) {
-				if(room.locboard[fx][fy] !== 'ee') var moves = room.locboard[fx][fy].getMoves();
-				if(moves.indexOf(data.to) === -1) room.move(data.from, data.to);
+				if(room.locboard[fx][fy].move(data.to)) console.log('moved');
 				else socket.emit('badMove');
 			}
 			else socket.emit('badMove');

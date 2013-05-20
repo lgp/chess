@@ -97,6 +97,9 @@ function Piece(type, initloc) {
 	this.loc = initloc;
 	this.validmoves = [];
 	this.hasMoved = false;
+	this.getMoved = function() {
+		return this.hasMoved;
+	}
 	this.move = function(newloc) {
 		this.getMoves();
 		if(this.validmoves.indexOf(newloc) !== -1) {
@@ -113,11 +116,15 @@ function Piece(type, initloc) {
 		var y = this.loc.y;
 		switch(type) {
 			case 'wp':
+				if(!this.getMoved() && room.locboard[x][y+2] === 'ee')
+					this.validmoves.push({x:x, y:y+2});
 				if((y<7) && room.locboard[x][y+1] === 'ee') this.validmoves.push({x:x, y:y+1});
 				if((y<7 && x<7) && room.locboard[x+1][y+1].color === 'b') this.validmoves.push({x:x+1, y:y+1});
 				if((y<7 && x>1) && room.locboard[x-1][y+1].color === 'b') this.validmoves.push({x:x-1, y:y+1});
 				break;
 			case 'bp':
+				if(!this.getMoved() && room.locboard[x][y-2] === 'ee')
+					this.validmoves.push({x:x, y:y-2});
 				if((y>1) && room.locboard[x][y-1] === 'ee') this.validmoves.push({x:x, y:y-1});
 				if((y>1 && x<7) && room.locboard[x+1][y-1].color === 'w') this.validmoves.push({x:x+1, y:y-1});
 				if((y>1 && x>1) && room.locboard[x-1][y-1].color === 'w') this.validmoves.push({x:x-1, y:y-1});

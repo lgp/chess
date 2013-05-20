@@ -14,8 +14,8 @@ function Room() {
 		for(var i=0; i<8; i++) this.locboard[i] = [8];
 		for(var i=0; i<8; i++)
 			for(var j=0; j<8; j++) {
-				this.board[i][j] = 'e';
-				this.locboard[i][j] = 'e';
+				this.board[i][j] = 'ee';
+				this.locboard[i][j] = 'ee';
 			}
 		this.board[0][0] = 'wr';
 		this.locboard[0][0] = new Piece('wr', {x:0,y:0});
@@ -60,12 +60,13 @@ function Room() {
 					this.locboard[j][i] = new Piece('bp', {x:j,y:i});
 				}
 			}
+		this.print();
 	}
 	this.move = function(oldl, newl) {
 		this.board[newl.x][newl.y] = this.board[oldl.x][oldl.y];
 		this.locboard[newl.x][newl.y] = this.locboard[oldl.x][oldl.y];
-		this.board[oldl.x][oldl.y] === 'e';
-		this.locboard[oldl.x][oldl.y] === 'e';
+		this.board[oldl.x][oldl.y] = 'ee';
+		this.locboard[oldl.x][oldl.y] = 'ee';
 		if(this.turn === 'white') this.turn = 'black';
 		else this.turn = 'white';
 	}
@@ -84,6 +85,9 @@ function Room() {
 				if(this.locboard[i][j].color === 'w') whitemoves = whitemoves.concat(this.locboard[i][j].getMoves());
 				
 		return whitemoves;
+	}
+	this.print = function() {
+		console.log(this.board);
 	}
 }
 
@@ -107,195 +111,195 @@ function Piece(type, initloc) {
 		var y = this.loc.y;
 		switch(type) {
 			case 'wp':
-				if((y<7) && room.locboard[x][y+1] === 'e') this.validmoves.push({x:x, y:y+1});
+				if((y<7) && room.locboard[x][y+1] === 'ee') this.validmoves.push({x:x, y:y+1});
 				if((y<7 && x<7) && room.locboard[x+1][y+1].color === 'b') this.validmoves.push({x:x+1, y:y+1});
 				if((y<7 && x>1) && room.locboard[x-1][y+1].color === 'b') this.validmoves.push({x:x-1, y:y+1});
 				break;
 			case 'bp':
-				if((y>1) && room.locboard[x][y-1] === 'e') this.validmoves.push({x:x, y:y-1});
+				if((y>1) && room.locboard[x][y-1] === 'ee') this.validmoves.push({x:x, y:y-1});
 				if((y>1 && x<7) && room.locboard[x+1][y-1].color === 'w') this.validmoves.push({x:x+1, y:y-1});
 				if((y>1 && x>1) && room.locboard[x-1][y-1].color === 'w') this.validmoves.push({x:x-1, y:y-1});
 				break;
 			case 'wr':
-				for(var i=x+1; i < 7 && room.locboard[i][y] === 'e'; i++){
+				for(var i=x+1; i < 7 && room.locboard[i][y] === 'ee'; i++){
 					this.validmoves.push({x:i, y:y});
 					if(room.locboard[i+1][y].color === 'b') this.validmoves.push({x:i+1, y:y});
 				}
-				for(var i=x-1; i > 1 && room.locboard[i][y] === 'e'; i--){
+				for(var i=x-1; i > 1 && room.locboard[i][y] === 'ee'; i--){
 					this.validmoves.push({x:i, y:y});
 					if(room.locboard[i-1][y].color === 'b') this.validmoves.push({x:i-1, y:y});
 				}
-				for(var i=y+1; i < 7 && room.locboard[x][i] === 'e'; i++){
+				for(var i=y+1; i < 7 && room.locboard[x][i] === 'ee'; i++){
 					this.validmoves.push({x:x, y:i});
 					if(room.locboard[x][i+1].color === 'b') this.validmoves.push({x:x, y:i+1});
 				}
-				for(var i=y-1; i > 1 && room.locboard[x][i] === 'e'; i--){
+				for(var i=y-1; i > 1 && room.locboard[x][i] === 'ee'; i--){
 					this.validmoves.push({x:x, y:i});
 					if(room.locboard[x][i-1].color === 'b') this.validmoves.push({x:x, y:i-1});
 				}
 				break;
 			case 'br':
-				for(var i=x+1; i < 7 && room.locboard[i][y] === 'e'; i++){
+				for(var i=x+1; i < 7 && room.locboard[i][y] === 'ee'; i++){
 					this.validmoves.push({x:i, y:y});
 					if(room.locboard[i+1][y].color === 'w') this.validmoves.push({x:i+1, y:y});
 				}
-				for(var i=x-1; i > 1 && room.locboard[i][y] === 'e'; i--){
+				for(var i=x-1; i > 1 && room.locboard[i][y] === 'ee'; i--){
 					this.validmoves.push({x:i, y:y});
 					if(room.locboard[i-1][y].color === 'w') this.validmoves.push({x:i-1, y:y});
 				}
-				for(var i=y+1; i < 7 && room.locboard[x][i] === 'e'; i++){
+				for(var i=y+1; i < 7 && room.locboard[x][i] === 'ee'; i++){
 					this.validmoves.push({x:x, y:i});
 					if(room.locboard[x][i+1].color === 'w') this.validmoves.push({x:x, y:i+1});
 				}
-				for(var i=y-1; i > 1 && room.locboard[x][i] === 'e'; i--){
+				for(var i=y-1; i > 1 && room.locboard[x][i] === 'ee'; i--){
 					this.validmoves.push({x:x, y:i});
 					if(room.locboard[x][i-1].color === 'w') this.validmoves.push({x:x, y:i-1});
 				}
 				break;
 			case 'wh':
-				if((x<6 && y<7) && (room.locboard[x+2][y+1] === 'e' || room.locboard[x+2][y+1].color === 'b')) this.validmoves.push({x:x+2, y:y+1});
-				if((x<7 && y<6) && (room.locboard[x+1][y+2] === 'e' || room.locboard[x+1][y+2].color === 'b')) this.validmoves.push({x:x+1, y:y+2});
-				if((x<6 && y>1) && (room.locboard[x+2][y-1] === 'e' || room.locboard[x+2][y-1].color === 'b')) this.validmoves.push({x:x+2, y:y-1});
-				if((x<7 && y>2) && (room.locboard[x+1][y-2] === 'e' || room.locboard[x+1][y-2].color === 'b')) this.validmoves.push({x:x+1, y:y-2});
-				if((x>2 && y<7) && (room.locboard[x-2][y+1] === 'e' || room.locboard[x-2][y+1].color === 'b')) this.validmoves.push({x:x-2, y:y+1});
-				if((x>2 && y>1) && (room.locboard[x-2][y-1] === 'e' || room.locboard[x-2][y-1].color === 'b')) this.validmoves.push({x:x-2, y:y-1});
-				if((x>1 && y<6) && (room.locboard[x-1][y+2] === 'e' || room.locboard[x-1][y+2].color === 'b')) this.validmoves.push({x:x-1, y:y+2});
-				if((x>1 && y>2) && (room.locboard[x-1][y-2] === 'e' || room.locboard[x-1][y-2].color === 'b')) this.validmoves.push({x:x-1, y:y-2});
+				if((x<6 && y<7) && (room.locboard[x+2][y+1] === 'ee' || room.locboard[x+2][y+1].color === 'b')) this.validmoves.push({x:x+2, y:y+1});
+				if((x<7 && y<6) && (room.locboard[x+1][y+2] === 'ee' || room.locboard[x+1][y+2].color === 'b')) this.validmoves.push({x:x+1, y:y+2});
+				if((x<6 && y>1) && (room.locboard[x+2][y-1] === 'ee' || room.locboard[x+2][y-1].color === 'b')) this.validmoves.push({x:x+2, y:y-1});
+				if((x<7 && y>2) && (room.locboard[x+1][y-2] === 'ee' || room.locboard[x+1][y-2].color === 'b')) this.validmoves.push({x:x+1, y:y-2});
+				if((x>2 && y<7) && (room.locboard[x-2][y+1] === 'ee' || room.locboard[x-2][y+1].color === 'b')) this.validmoves.push({x:x-2, y:y+1});
+				if((x>2 && y>1) && (room.locboard[x-2][y-1] === 'ee' || room.locboard[x-2][y-1].color === 'b')) this.validmoves.push({x:x-2, y:y-1});
+				if((x>1 && y<6) && (room.locboard[x-1][y+2] === 'ee' || room.locboard[x-1][y+2].color === 'b')) this.validmoves.push({x:x-1, y:y+2});
+				if((x>1 && y>2) && (room.locboard[x-1][y-2] === 'ee' || room.locboard[x-1][y-2].color === 'b')) this.validmoves.push({x:x-1, y:y-2});
 				break;
 			case 'bh':
-				if((x<6 && y<7) && (room.locboard[x+2][y+1] === 'e' || room.locboard[x+2][y+1].color === 'w')) this.validmoves.push({x:x+2, y:y+1});
-				if((x<7 && y<6) && (room.locboard[x+1][y+2] === 'e' || room.locboard[x+1][y+2].color === 'w')) this.validmoves.push({x:x+1, y:y+2});
-				if((x<6 && y>1) && (room.locboard[x+2][y-1] === 'e' || room.locboard[x+2][y-1].color === 'w')) this.validmoves.push({x:x+2, y:y-1});
-				if((x<7 && y>2) && (room.locboard[x+1][y-2] === 'e' || room.locboard[x+1][y-2].color === 'w')) this.validmoves.push({x:x+1, y:y-2});
-				if((x>2 && y<7) && (room.locboard[x-2][y+1] === 'e' || room.locboard[x-2][y+1].color === 'w')) this.validmoves.push({x:x-2, y:y+1});
-				if((x>2 && y>1) && (room.locboard[x-2][y-1] === 'e' || room.locboard[x-2][y-1].color === 'w')) this.validmoves.push({x:x-2, y:y-1});
-				if((x>1 && y<6) && (room.locboard[x-1][y+2] === 'e' || room.locboard[x-1][y+2].color === 'w')) this.validmoves.push({x:x-1, y:y+2});
-				if((x>1 && y>2) && (room.locboard[x-1][y-2] === 'e' || room.locboard[x-1][y-2].color === 'w')) this.validmoves.push({x:x-1, y:y-2});
+				if((x<6 && y<7) && (room.locboard[x+2][y+1] === 'ee' || room.locboard[x+2][y+1].color === 'w')) this.validmoves.push({x:x+2, y:y+1});
+				if((x<7 && y<6) && (room.locboard[x+1][y+2] === 'ee' || room.locboard[x+1][y+2].color === 'w')) this.validmoves.push({x:x+1, y:y+2});
+				if((x<6 && y>1) && (room.locboard[x+2][y-1] === 'ee' || room.locboard[x+2][y-1].color === 'w')) this.validmoves.push({x:x+2, y:y-1});
+				if((x<7 && y>2) && (room.locboard[x+1][y-2] === 'ee' || room.locboard[x+1][y-2].color === 'w')) this.validmoves.push({x:x+1, y:y-2});
+				if((x>2 && y<7) && (room.locboard[x-2][y+1] === 'ee' || room.locboard[x-2][y+1].color === 'w')) this.validmoves.push({x:x-2, y:y+1});
+				if((x>2 && y>1) && (room.locboard[x-2][y-1] === 'ee' || room.locboard[x-2][y-1].color === 'w')) this.validmoves.push({x:x-2, y:y-1});
+				if((x>1 && y<6) && (room.locboard[x-1][y+2] === 'ee' || room.locboard[x-1][y+2].color === 'w')) this.validmoves.push({x:x-1, y:y+2});
+				if((x>1 && y>2) && (room.locboard[x-1][y-2] === 'ee' || room.locboard[x-1][y-2].color === 'w')) this.validmoves.push({x:x-1, y:y-2});
 				break;
 			case 'wb':
-				for(var i=x+1, j=y+1; i<7 && j<7 && room.locboard[i][j] === 'e'; i++, j++) {
+				for(var i=x+1, j=y+1; i<7 && j<7 && room.locboard[i][j] === 'ee'; i++, j++) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i+1][j+1].color === 'b') this.validmoves.push({x:i+1, y:j+1});
 				}
-				for(var i=x-1, j=y-1; i>1 && j>1 && room.locboard[i][j] === 'e'; i--, j--) {
+				for(var i=x-1, j=y-1; i>1 && j>1 && room.locboard[i][j] === 'ee'; i--, j--) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i-1][j-1].color === 'b') this.validmoves.push({x:i-1, y:j-1});
 				}
-				for(var i=x+1, j=y-1; i<7 && j>1 && room.locboard[i][j] === 'e'; i++, j--) {
+				for(var i=x+1, j=y-1; i<7 && j>1 && room.locboard[i][j] === 'ee'; i++, j--) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i+1][j-1].color === 'b') this.validmoves.push({x:i+1, y:j-1});
 				}
-				for(var i=x-1, j=y+1; i>1 && j<7 && room.locboard[i][j] === 'e'; i--, j++) {
+				for(var i=x-1, j=y+1; i>1 && j<7 && room.locboard[i][j] === 'ee'; i--, j++) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i-1][j+1].color === 'b') this.validmoves.push({x:i-1, y:j+1});
 				}
 				break;
 			case 'bb':
-				for(var i=x+1, j=y+1; i<7 && j<7 && room.locboard[i][j] === 'e'; i++, j++) {
+				for(var i=x+1, j=y+1; i<7 && j<7 && room.locboard[i][j] === 'ee'; i++, j++) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i+1][j+1].color === 'w') this.validmoves.push({x:i+1, y:j+1});
 				}
-				for(var i=x-1, j=y-1; i>1 && j>1 && room.locboard[i][j] === 'e'; i--, j--) {
+				for(var i=x-1, j=y-1; i>1 && j>1 && room.locboard[i][j] === 'ee'; i--, j--) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i-1][j-1].color === 'w') this.validmoves.push({x:i-1, y:j-1});
 				}
-				for(var i=x+1, j=y-1; i<7 && j>1 && room.locboard[i][j] === 'e'; i++, j--) {
+				for(var i=x+1, j=y-1; i<7 && j>1 && room.locboard[i][j] === 'ee'; i++, j--) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i+1][j-1].color === 'w') this.validmoves.push({x:i+1, y:j-1});
 				}
-				for(var i=x-1, j=y+1; i>1 && j<7 && room.locboard[i][j] === 'e'; i--, j++) {
+				for(var i=x-1, j=y+1; i>1 && j<7 && room.locboard[i][j] === 'ee'; i--, j++) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i-1][j+1].color === 'w') this.validmoves.push({x:i-1, y:j+1});
 				}
 				break;
 			case 'wq':
-				for(var i=x+1; i < 7 && room.locboard[i][y] === 'e'; i++){
+				for(var i=x+1; i < 7 && room.locboard[i][y] === 'ee'; i++){
 					this.validmoves.push({x:i, y:y});
 					if(room.locboard[i+1][y].color === 'b') this.validmoves.push({x:i+1, y:y});
 				}
-				for(var i=x-1; i > 1 && room.locboard[i][y] === 'e'; i--){
+				for(var i=x-1; i > 1 && room.locboard[i][y] === 'ee'; i--){
 					this.validmoves.push({x:i, y:y});
 					if(room.locboard[i-1][y].color === 'b') this.validmoves.push({x:i-1, y:y});
 				}
-				for(var i=y+1; i < 7 && room.locboard[x][i] === 'e'; i++){
+				for(var i=y+1; i < 7 && room.locboard[x][i] === 'ee'; i++){
 					this.validmoves.push({x:x, y:i});
 					if(room.locboard[x][i+1].color === 'b') this.validmoves.push({x:x, y:i+1});
 				}
-				for(var i=y-1; i > 1 && room.locboard[x][i] === 'e'; i--){
+				for(var i=y-1; i > 1 && room.locboard[x][i] === 'ee'; i--){
 					this.validmoves.push({x:x, y:i});
 					if(room.locboard[x][i-1].color === 'b') this.validmoves.push({x:x, y:i-1});
 				}
-				for(var i=x+1, j=y+1; i<7 && j<7 && room.locboard[i][j] === 'e'; i++, j++) {
+				for(var i=x+1, j=y+1; i<7 && j<7 && room.locboard[i][j] === 'ee'; i++, j++) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i+1][j+1].color === 'b') this.validmoves.push({x:i+1, y:j+1});
 				}
-				for(var i=x-1, j=y-1; i>1 && j>1 && room.locboard[i][j] === 'e'; i--, j--) {
+				for(var i=x-1, j=y-1; i>1 && j>1 && room.locboard[i][j] === 'ee'; i--, j--) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i-1][j-1].color === 'b') this.validmoves.push({x:i-1, y:j-1});
 				}
-				for(var i=x+1, j=y-1; i<7 && j>1 && room.locboard[i][j] === 'e'; i++, j--) {
+				for(var i=x+1, j=y-1; i<7 && j>1 && room.locboard[i][j] === 'ee'; i++, j--) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i+1][j-1].color === 'b') this.validmoves.push({x:i+1, y:j-1});
 				}
-				for(var i=x-1, j=y+1; i>1 && j<7 && room.locboard[i][j] === 'e'; i--, j++) {
+				for(var i=x-1, j=y+1; i>1 && j<7 && room.locboard[i][j] === 'ee'; i--, j++) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i-1][j+1].color === 'b') this.validmoves.push({x:i-1, y:j+1});
 				}
 				break;
 			case 'bq':
-				for(var i=x+1; i < 7 && room.locboard[i][y] === 'e'; i++){
+				for(var i=x+1; i < 7 && room.locboard[i][y] === 'ee'; i++){
 					this.validmoves.push({x:i, y:y});
 					if(room.locboard[i+1][y].color === 'w') this.validmoves.push({x:i+1, y:y});
 				}
-				for(var i=x-1; i > 1 && room.locboard[i][y] === 'e'; i--){
+				for(var i=x-1; i > 1 && room.locboard[i][y] === 'ee'; i--){
 					this.validmoves.push({x:i, y:y});
 					if(room.locboard[i-1][y].color === 'w') this.validmoves.push({x:i-1, y:y});
 				}
-				for(var i=y+1; i < 7 && room.locboard[x][i] === 'e'; i++){
+				for(var i=y+1; i < 7 && room.locboard[x][i] === 'ee'; i++){
 					this.validmoves.push({x:x, y:i});
 					if(room.locboard[x][i+1].color === 'w') this.validmoves.push({x:x, y:i+1});
 				}
-				for(var i=y-1; i > 1 && room.locboard[x][i] === 'e'; i--){
+				for(var i=y-1; i > 1 && room.locboard[x][i] === 'ee'; i--){
 					this.validmoves.push({x:x, y:i});
 					if(room.locboard[x][i-1].color === 'w') this.validmoves.push({x:x, y:i-1});
 				}
-				for(var i=x+1, j=y+1; i<7 && j<7 && room.locboard[i][j] === 'e'; i++, j++) {
+				for(var i=x+1, j=y+1; i<7 && j<7 && room.locboard[i][j] === 'ee'; i++, j++) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i+1][j+1].color === 'w') this.validmoves.push({x:i+1, y:j+1});
 				}
-				for(var i=x-1, j=y-1; i>1 && j>1 && room.locboard[i][j] === 'e'; i--, j--) {
+				for(var i=x-1, j=y-1; i>1 && j>1 && room.locboard[i][j] === 'ee'; i--, j--) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i-1][j-1].color === 'w') this.validmoves.push({x:i-1, y:j-1});
 				}
-				for(var i=x+1, j=y-1; i<7 && j>1 && room.locboard[i][j] === 'e'; i++, j--) {
+				for(var i=x+1, j=y-1; i<7 && j>1 && room.locboard[i][j] === 'ee'; i++, j--) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i+1][j-1].color === 'w') this.validmoves.push({x:i+1, y:j-1});
 				}
-				for(var i=x-1, j=y+1; i>1 && j<7 && room.locboard[i][j] === 'e'; i--, j++) {
+				for(var i=x-1, j=y+1; i>1 && j<7 && room.locboard[i][j] === 'ee'; i--, j++) {
 					this.validmoves.push({x:i, y:j});
 					if(room.locboard[i-1][j+1].color === 'w') this.validmoves.push({x:i-1, y:j+1});
 				}
 				break;
 			case 'wk':
 				var badmoves = room.getBlack();
-				if((x<7) && (room.locboard[x+1][y] === 'e' || room.locboard[x+1][y].color === 'b') && badmoves.indexOf({x:x+1, y:y}) === -1)
+				if((x<7) && (room.locboard[x+1][y] === 'ee' || room.locboard[x+1][y].color === 'b') && badmoves.indexOf({x:x+1, y:y}) === -1)
 					this.validmoves.push({x:x+1, y:y});
-				if((x>1) && (room.locboard[x-1][y] === 'e' || room.locboard[x-1][y].color === 'b') && badmoves.indexOf({x:x-1, y:y}) === -1)
+				if((x>1) && (room.locboard[x-1][y] === 'ee' || room.locboard[x-1][y].color === 'b') && badmoves.indexOf({x:x-1, y:y}) === -1)
 					this.validmoves.push({x:x-1, y:y});
-				if((y<7) && (room.locboard[x][y+1] === 'e' || room.locboard[x][y+1].color === 'b') && badmoves.indexOf({x:x, y:y+1}) === -1)
+				if((y<7) && (room.locboard[x][y+1] === 'ee' || room.locboard[x][y+1].color === 'b') && badmoves.indexOf({x:x, y:y+1}) === -1)
 					this.validmoves.push({x:x, y:y+1});
-				if((y>1) && (room.locboard[x][y-1] === 'e' || room.locboard[x][y-1].color === 'b') && badmoves.indexOf({x:x, y:y-1}) === -1)
+				if((y>1) && (room.locboard[x][y-1] === 'ee' || room.locboard[x][y-1].color === 'b') && badmoves.indexOf({x:x, y:y-1}) === -1)
 					this.validmoves.push({x:x, y:y-1});
 				break;
 			case 'bk':
 				var badmoves = room.getBlack();
-				if((x<7) && (room.locboard[x+1][y] === 'e' || room.locboard[x+1][y].color === 'w') && badmoves.indexOf({x:x+1, y:y}) === -1)
+				if((x<7) && (room.locboard[x+1][y] === 'ee' || room.locboard[x+1][y].color === 'w') && badmoves.indexOf({x:x+1, y:y}) === -1)
 					this.validmoves.push({x:x+1, y:y});
-				if((x>1) && (room.locboard[x-1][y] === 'e' || room.locboard[x-1][y].color === 'w') && badmoves.indexOf({x:x-1, y:y}) === -1)
+				if((x>1) && (room.locboard[x-1][y] === 'ee' || room.locboard[x-1][y].color === 'w') && badmoves.indexOf({x:x-1, y:y}) === -1)
 					this.validmoves.push({x:x-1, y:y});
-				if((y<7) && (room.locboard[x][y+1] === 'e' || room.locboard[x][y+1].color === 'w') && badmoves.indexOf({x:x, y:y+1}) === -1)
+				if((y<7) && (room.locboard[x][y+1] === 'ee' || room.locboard[x][y+1].color === 'w') && badmoves.indexOf({x:x, y:y+1}) === -1)
 					this.validmoves.push({x:x, y:y+1});
-				if((y>1) && (room.locboard[x][y-1] === 'e' || room.locboard[x][y-1].color === 'w') && badmoves.indexOf({x:x, y:y-1}) === -1)
+				if((y>1) && (room.locboard[x][y-1] === 'ee' || room.locboard[x][y-1].color === 'w') && badmoves.indexOf({x:x, y:y-1}) === -1)
 					this.validmoves.push({x:x, y:y-1});
 				break;
 		}
@@ -309,17 +313,19 @@ io.on('connection', function(socket) {
 	var color = room.colors.pop();
 	socket.emit('color', {color: color});
 	socket.set('color', color, function(){});
+	socket.emit('update', room.board);
 	
 	socket.on('move', function(data) {
 		var fx = data.from.x, fy = data.from.y;
 		socket.get('color', function(err, color) {
 			if(color === room.turn) {
-				var moves = room.locboard[fx][fy].getMoves();
+				if(room.locboard[fx][fy] !== 'ee') var moves = room.locboard[fx][fy].getMoves();
 				if(moves.indexOf(data.to) === -1) room.move(data.from, data.to);
 				else socket.emit('badMove');
 			}
 			else socket.emit('badMove');
 			io.sockets.emit('update', room.board);
+			room.print();
 		});
 	});
 });

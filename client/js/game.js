@@ -5,14 +5,14 @@ var fgTileLayer;
 
 var white;
 
-
+var socket;
 
 /*
 	Function: initPage
 	
 	Initializes the page, including instantiating the stage and layers.  Called in the $(document).ready() function.
 	
-	Variables used:
+	Global vars:
 	
 		stage - The game stage, used by KineticJS
 		bgTileLayer - The tiles that will be highlighted and are colored gray/white
@@ -103,6 +103,59 @@ function clearBoard() {
 	bgTileLayer.removeChildren();
 	pieceLayer.removeChildren();
 	fgTileLayer.removeChildren();
+}
+
+/*
+	Function: connect
+	
+	Connects the client to the game server.
+	
+	Paramaters:
+		
+		host - IP of game server
+		port - Port of game server
+		
+	Global vars:
+		
+		socket - Socket used to send all game data
+*/
+function connect(host, port) {
+	socket = io.connect('http://' + host + ':' + port);
+	listeners();
+}
+
+/*
+	Function: listeners
+	
+	Sets up all socket.io listeners
+	
+	Global vars:
+	
+		socket - Socket used to send all game data
+*/
+function listeners() {
+	//Connection event--currently no data passed
+	socket.on('connect', function() {
+		alert("You've been connected");
+	});
+	
+	//Sets colors
+	socket.on('color', function(data) {
+		if (data.color == 'white')
+			white = true;
+		else
+			white = false;
+	});
+	
+	//Updates board from server
+	socket.on('update', function(data) {
+		drawBoard(data.board);
+	});
+	
+	//Bad move handler
+	socket.on('badMove', function() {
+		alert('Sorry, that was a bad move.  Try a different one');
+	});
 }
 
 $(document).ready(function() {

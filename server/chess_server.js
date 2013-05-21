@@ -122,6 +122,7 @@ function Piece(type, initloc) {
 		this.getMoves();
 		console.log('got into move: ' + this.type + ' moving to [' + newloc.x + '][' + newloc.y + ']' );
 		this.logValidMoves();
+		console.log('index of move in validmoves is: ' + this.validmoves.indexOf(newloc));
 		if(this.validmoves.indexOf(newloc) !== -1) {
 			console.log('and it was a valid move');
 			room.move(loc, newloc);
@@ -133,6 +134,7 @@ function Piece(type, initloc) {
 		else return false;
 	}
 	this.getMoves = function() {
+		this.validmoves = [];
 		var x = this.loc.x;
 		var y = this.loc.y;
 		switch(type) {

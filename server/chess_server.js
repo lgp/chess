@@ -112,9 +112,16 @@ function Piece(type, initloc) {
 				break;
 		}
 	}
+	this.logValidMoves() {
+		console.log('valid moves: ');
+		for(var i=0; i<validmoves.length; i++) {
+			console.log('[' + this.validmoves[i].x + '][' + this.validmoves[i].y + ']');
+		}
+	}
 	this.move = function(newloc) {
 		this.getMoves();
 		console.log('got into move: ' + this.type + ' moving to [' + newloc.x + '][' + newloc.y + ']' );
+		this.logValidMoves();
 		if(this.validmoves.indexOf(newloc) !== -1) {
 			console.log('and it was a valid move');
 			room.move(loc, newloc);

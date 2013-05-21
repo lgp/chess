@@ -38,7 +38,7 @@ function initPage() {
 	
 	loader();
 	
-	connect('localhost', '8080');
+	connect('server.manic0892.com', '8080');
 }
 
 /*

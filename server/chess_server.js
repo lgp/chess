@@ -4,6 +4,13 @@ var io = require('socket.io').listen(8080);
 var room = new Room();
 room.init();
 
+function checkLoc (list, loc) {
+	for(var i=0; i<list.length; i++)
+		if(list[i].x === loc.x && list[i].y === loc.y) return i;
+	
+	return -1;
+}
+
 function Room() {
 	this.init = function() {
 		this.colors = ['black', 'white'];
@@ -123,7 +130,7 @@ function Piece(type, initloc) {
 		console.log('got into move: ' + this.type + ' moving to [' + newloc.x + '][' + newloc.y + ']' );
 		this.logValidMoves();
 		console.log('index of move in validmoves is: ' + this.validmoves.indexOf(newloc));
-		if(this.validmoves.indexOf(newloc) !== -1) {
+		if(checkLoc(this.validmoves, newloc) !== -1) {
 			console.log('and it was a valid move');
 			room.move(loc, newloc);
 			this.loc = newloc;

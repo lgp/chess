@@ -132,7 +132,7 @@ function Piece(type, initloc) {
 		console.log('index of move in validmoves is: ' + this.validmoves.indexOf(newloc));
 		if(checkLoc(this.validmoves, newloc) !== -1) {
 			console.log('and it was a valid move');
-			room.move(loc, newloc);
+			room.move(this.loc, newloc);
 			this.loc = newloc;
 			this.hasMoved = true;
 			this.getMoves();

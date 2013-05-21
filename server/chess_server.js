@@ -100,6 +100,18 @@ function Piece(type, initloc) {
 	this.getMoved = function() {
 		return this.hasMoved;
 	}
+	this.upgrade = function(newpiece) {
+		switch(this.type) {
+			case 'wp':
+				if(this.loc.y === 7) this.type = this.color + newpiece;
+				break;
+			case 'bp':
+				if(this.loc.y === 0) this.type = this.color + newpiece;
+				break;
+			case default:
+				break;
+		}
+	}
 	this.move = function(newloc) {
 		this.getMoves();
 		if(this.validmoves.indexOf(newloc) !== -1) {
@@ -311,6 +323,8 @@ function Piece(type, initloc) {
 				if((y>1) && (room.locboard[x][y-1] === 'ee' || room.locboard[x][y-1].color === 'w') && badmoves.indexOf({x:x, y:y-1}) === -1)
 					this.validmoves.push({x:x, y:y-1});
 				break;
+			case default:
+				break;
 		}
 		return this.validmoves;
 	}
@@ -328,8 +342,13 @@ io.on('connection', function(socket) {
 		var fx = data.from.x, fy = data.from.y;
 		socket.get('color', function(err, color) {
 			if(color === room.turn) {
-				if(room.locboard[fx][fy].move(data.to)) console.log('moved');
-				else socket.emit('badMove');
+				if(data.upgrade !== false) {
+					room.locboard[fx][fy].upgrade(data.upgrade);
+				}
+				else {
+					if(room.locboard[fx][fy].move(data.to)) console.log('moved');
+					else socket.emit('badMove');
+				}
 			}
 			else socket.emit('badMove');
 			io.sockets.emit('update', room.board);

@@ -108,7 +108,7 @@ function Piece(type, initloc) {
 			case 'bp':
 				if(this.loc.y === 0) this.type = this.color + newpiece;
 				break;
-			case default:
+			default:
 				break;
 		}
 	}
@@ -323,7 +323,7 @@ function Piece(type, initloc) {
 				if((y>1) && (room.locboard[x][y-1] === 'ee' || room.locboard[x][y-1].color === 'w') && badmoves.indexOf({x:x, y:y-1}) === -1)
 					this.validmoves.push({x:x, y:y-1});
 				break;
-			case default:
+			default:
 				break;
 		}
 		return this.validmoves;

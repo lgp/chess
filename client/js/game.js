@@ -38,7 +38,7 @@ function initPage() {
 	
 	loader();
 	
-	connect('server.manic0892.com', '8080');
+	connect('localhost', '8080');
 }
 
 /*
@@ -118,9 +118,9 @@ function drawBGTile(i,j,x,y) {
 		height: tileSize,
 		x: x,
 		y: y,
-		fill: bgcolor
+		fill: bgcolor,
+		id: String(i) + String(j)
 	});
-	newRect.id = String(i) + String(j);
 	bgTileLayer.add(newRect);
 }
 
@@ -183,9 +183,9 @@ function drawPiece(i,j,x,y,piece) {
 			x:x + xOff,
 			y:y + yOff,
 			height:height,
-			width:width
+			width:width,
+			id: String(i) + String(j)
 		});
-		newImg.id = String(i) + String(j);
 		pieceLayer.add(newImg);
 	}
 }
@@ -210,9 +210,10 @@ function drawFGTile(i,j,x,y,piece) {
 		x:x,
 		y:y,
 		strokeWidth:1,
-		stroke: 'black'
+		stroke: 'black',
+		id: String(i) + String(j)
 	});
-	newRect.id = String(i) + String(j);
+	newRect.highlighted = false;
 	newRect.i = i;
 	newRect.j = j;
 	newRect.piece = piece;
@@ -233,6 +234,8 @@ function clearBoard() {
 	fgTileLayer.removeChildren();
 }
 
+var currSelectedPiece = {i:null,j:null};
+
 /*
 	Function: move
 	
@@ -245,30 +248,40 @@ function clearBoard() {
 		piece - ID of piece (color(b,w), piece ID(r,h,k,p,b,q))
 */
 function move(i,j,piece) {
+	i = Number(i);
+	j = Number(j);
 	console.log(i,j,piece);
 	if (piece.charAt(0) == 'b' && isWhite || piece.charAt(0) == 'w' && !isWhite) {
 		return;
-	}
-	switch(piece.charAt(1)) {
-		case 'b':
+	} else if (lookupTile(2,i,j).highlighted == true) {
+		socket.emit('move', {from: {x: currSelectedPiece.i, y: currSelectedPiece.j}, to: {x: i, y:j}, upgrade: false});
+	} else if (currSelectedPiece.i == i && currSelectedPiece.j == j) {
+		resetHighlight();
+		currSelectedPiece = {i:null, j:null};
+	} else {
+		resetHighlight();
+		currSelectedPiece.i = i;
+		currSelectedPiece.j = j;
+		switch(piece.charAt(1)) {
 			case 'b':
-			highlightBishop(i,j);
-			break;
-		case 'h':
-			highlightKnight(i,j);
-			break;
-		case 'k':
-			highlightKing(i,j);
-			break;
-		case 'p':
-			highlightPawn(i,j);
-			break;
-		case 'q':
-			highlightQueen(i,j);
-			break;
-		case 'r':
-			highlightRook(i,j);
-			break;
+				highlightBishop(i,j);
+				break;
+			case 'h':
+				highlightKnight(i,j);
+				break;
+			case 'k':
+				highlightKing(i,j);
+				break;
+			case 'p':
+				highlightPawn(i,j);
+				break;
+			case 'q':
+				highlightQueen(i,j);
+				break;
+			case 'r':
+				highlightRook(i,j);
+				break;
+		}
 	}
 }
 
@@ -321,7 +334,37 @@ function highlightKnight(i,j) {
 		j - J iterator of array
 */
 function highlightPawn(i,j) {
-	
+	if (isWhite) {
+		if (j < 7) {
+			if (lookupTile(2,i,j+1).piece == 'ee')
+				highlight(i,j+1);
+			if (i < 7) {
+				if (lookupTile(2,i+1,j+1).piece.charAt(0) == 'b')
+					highlight(i+1,j+1);
+			}
+			if (i > 0) {
+				if (lookupTile(2,i-1,j+1).piece.charAt(0) == 'b')
+					highlight(i-1,j+1);
+			}
+			if (j == 1 && lookupTile(2,i,j+2).piece == 'ee')
+				highlight(i,j+2);
+		}
+	} else {
+		if (j > 0) {
+			if (lookupTile(2,i,j-1).piece == 'ee')
+				highlight(i,j-1);
+			if (i < 7) {
+				if (lookupTile(2,i+1,j-1).piece.charAt(0) == 'w')
+					highlight(i+1,j-1);
+			}
+			if (i > 0) {
+				if (lookupTile(2,i-1,j-1).piece.charAt(0) == 'w')
+					highlight(i-1,j-1);
+			}
+			if (j == 6 && lookupTile(2,i,j-2).piece == 'ee')
+				highlight(i,j-2);
+		}
+	}
 }
 
 /*
@@ -351,11 +394,54 @@ function highlightRook(i,j) {
 }
 
 /*
+	Function: highlight
+	
+	Highlights individual square.
+	
+	Paramaters:
+		i - I iterator of array
+		j - J iterator of array
+*/
+function highlight(i,j) {
+	var tileToHighlight = lookupTile(2,i,j);
+	tileToHighlight.setFill('rgba(212,250,250,0.8)');
+	tileToHighlight.highlighted = true;
+	fgTileLayer.draw();
+}
+
+/*
+	Function: lookupTile
+	
+	Looks up & returns tile
+	
+	Paramaters:
+		layer - 0 for bgTileLayer, 1 for pieceLayer, 2 for fgTileLayer
+		i - I iterator of array
+		j - J iterator of array
+*/
+function lookupTile(layer,i,j) {
+	switch(layer) {
+		case 0:
+			layer = bgTileLayer;
+			break;
+		case 1:
+			layer = pieceLayer;
+			break;
+		case 2:
+			layer = fgTileLayer;
+			break;
+	}
+	var id = '#' + i + j;
+	return layer.get(id)[0];
+}
+
+/*
 	Function: resetHighlight
 */
 function resetHighlight() {
 	for (i in fgTileLayer.children) {
-		fgTileLayer.children[i].fill = 'rgba(0,0,0,0)';
+		fgTileLayer.children[i].setFill('rgba(0,0,0,0)');
+		fgTileLayer.children[i].highlighted = false;
 	}
 	fgTileLayer.draw();
 }

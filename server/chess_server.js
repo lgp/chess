@@ -114,7 +114,9 @@ function Piece(type, initloc) {
 	}
 	this.move = function(newloc) {
 		this.getMoves();
+		console.log('got into move: ' + this.type + ' moving to [' + newloc.x + '][' + newloc.y + ']' );
 		if(this.validmoves.indexOf(newloc) !== -1) {
+			console.log('and it was a valid move');
 			room.move(loc, newloc);
 			this.loc = newloc;
 			this.hasMoved = true;
@@ -346,11 +348,15 @@ io.on('connection', function(socket) {
 					room.locboard[fx][fy].upgrade(data.upgrade);
 				}
 				else {
+					console.log('attempting move of: ' + room.locboard[fx][fy].type + '[' + fx + ']' + '[' + fy + '] to: [' + data.to.x + ']' + '[' + data.to.y + ']');
 					if(room.locboard[fx][fy].move(data.to)) console.log('moved');
 					else socket.emit('badMove');
 				}
 			}
-			else socket.emit('badMove');
+			else {
+				console.log('NOT PLAYERS TURN: ' + color);
+				socket.emit('badMove');
+			}
 			io.sockets.emit('update', room.board);
 			room.print();
 		});

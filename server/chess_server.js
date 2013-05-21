@@ -114,7 +114,7 @@ function Piece(type, initloc) {
 	}
 	this.logValidMoves = function() {
 		console.log('valid moves: ');
-		for(var i=0; i<validmoves.length; i++) {
+		for(var i=0; i<this.validmoves.length; i++) {
 			console.log('[' + this.validmoves[i].x + '][' + this.validmoves[i].y + ']');
 		}
 	}

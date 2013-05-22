@@ -1,3 +1,8 @@
+/*
+	File: game.js
+	
+	All the logic for the client-side.  Requires the game.html file, jQuery, and Kinetic.js
+*/
 var stage;
 var bgTileLayer;
 var pieceLayer;
@@ -307,7 +312,7 @@ function highlightBishop(i,j) {
 	helper(i,j,1,-1);
 	
 	/*
-		Function: helper
+		Method: helper
 		
 		Highlights each diagonal.  Used in <highlightBishop>
 		
@@ -358,7 +363,7 @@ function highlightKing(i,j) {
 	helper(i,j,0,-1);
 	
 	/*
-		Function: helper
+		Method: helper
 		
 		Highlights each square.  Used in <highlightKing>.
 		
@@ -401,7 +406,7 @@ function highlightKnight(i,j) {
 	helper(i-2,j+1);
 	
 	/*
-		Function: helper
+		Method: helper
 		
 		Highlights each square.  Used in <highlightKnight>.
 		
@@ -491,7 +496,7 @@ function highlightQueen(i,j) {
 	helper(i,j,0,-1);
 	
 	/*
-		Function: helper
+		Method: helper
 		
 		Highlights each square.  Used in <highlightQueen>.
 		
@@ -537,7 +542,7 @@ function highlightRook(i,j) {
 	helper(i,j,0,-1);
 	
 	/*
-		Function: helper
+		Method: helper
 		
 		Highlights each square.  Used in <highlightRook>.
 		

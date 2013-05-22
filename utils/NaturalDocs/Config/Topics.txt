@@ -143,6 +143,9 @@ Topic Type: Group
 Topic Type: Function
 
    Plural: Functions
+   Scope: Start
+   Class Hierarchy: Yes
+   Page Title If First: Yes
    Break Lists: Yes
    Can Group With: Properties
 
@@ -154,7 +157,6 @@ Topic Type: Function
       routine, routines
       subroutine, subroutines
       sub, subs
-      method, methods
       callback, callbacks
       constructor, constructors
       destructor, destructors
@@ -264,6 +266,16 @@ Topic Type: Delegate
    Plural: Delegates
    Keywords:
       delegate, delegates
+
+
+Topic Type: Method
+
+   Plural: Methods
+   Break Lists: Yes
+   Can Group With: Properties
+
+   Keywords:
+      method, methods
 
 
 Topic Type: Macro

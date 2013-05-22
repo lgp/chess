@@ -306,6 +306,17 @@ function highlightBishop(i,j) {
 	helper(i,j,-1,1);
 	helper(i,j,1,-1);
 	
+	/*
+		Function: helper
+		
+		Highlights each diagonal.  Used in <highlightBishop>
+		
+		Paramaters:
+			i - I iterator of array
+			j - J iterator of array
+			iMult - Direction of diagonal
+			jMult - Direction of diagonal
+	*/
 	function helper(i,j,iMult,jMult) {
 		while (i >= 0 && i <= 7 && j <= 7 && j >= 0) {
 			i += 1*iMult;
@@ -346,6 +357,17 @@ function highlightKing(i,j) {
 	helper(i,j,0,1);
 	helper(i,j,0,-1);
 	
+	/*
+		Function: helper
+		
+		Highlights each square.  Used in <highlightKing>.
+		
+		Paramaters:
+			i - I iterator of array
+			j - J iterator of array
+			di - Direction to travel
+			dj - Direction to travel
+	*/
 	function helper(i,j,di,dj) {
 		i += di;
 		j += dj;
@@ -377,6 +399,16 @@ function highlightKnight(i,j) {
 	helper(i+2,j+1);
 	helper(i-2,j-1);
 	helper(i-2,j+1);
+	
+	/*
+		Function: helper
+		
+		Highlights each square.  Used in <highlightKnight>.
+		
+		Paramaters:
+			i - I iterator of array of square to highlight
+			j - J iterator of array of square to highlight
+	*/
 	function helper(i,j) {
 		var enemyToken;
 		if (isWhite)
@@ -457,6 +489,18 @@ function highlightQueen(i,j) {
 	helper(i,j,-1,0);
 	helper(i,j,0,1);
 	helper(i,j,0,-1);
+	
+	/*
+		Function: helper
+		
+		Highlights each square.  Used in <highlightQueen>.
+		
+		Paramaters:
+			i - I iterator of array
+			j - J iterator of array
+			iMult - Direction of diagonal
+			jMult - Direction of diagonal
+	*/
 	function helper(i,j,iMult,jMult) {
 		while (i >= 0 && i <= 7 && j <= 7 && j >= 0) {
 			i += 1*iMult;
@@ -491,6 +535,18 @@ function highlightRook(i,j) {
 	helper(i,j,-1,0);
 	helper(i,j,0,1);
 	helper(i,j,0,-1);
+	
+	/*
+		Function: helper
+		
+		Highlights each square.  Used in <highlightRook>.
+		
+		Paramaters:
+			i - I iterator of array
+			j - J iterator of array
+			di - Direction to travel
+			dj - Direction to travel
+	*/
 	function helper(i,j,iMult,jMult) {
 		while (i >= 0 && i <= 7 && j <= 7 && j >= 0) {
 			i += 1*iMult;

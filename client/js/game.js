@@ -331,7 +331,32 @@ function highlightBishop(i,j) {
 		j - J iterator of array
 */
 function highlightKing(i,j) {
+	var enemyToken;
+	if (isWhite)
+		enemyToken = 'b';
+	else
+		enemyToken = 'w';
+		
+	helper(i,j,1,1);
+	helper(i,j,-1,-1);
+	helper(i,j,-1,1);
+	helper(i,j,1,-1);
+	helper(i,j,1,0);
+	helper(i,j,-1,0);
+	helper(i,j,0,1);
+	helper(i,j,0,-1);
 	
+	function helper(i,j,di,dj) {
+		i += di;
+		j += dj;
+		if (i < 0 || i > 7 || j < 0 || j > 7) {
+		} else {
+			var tileToHighlight = lookupTile(2,i,j);
+			if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
+				highlight(i, j);
+			//if (tileToHighlight.piece != 'ee')
+		} 
+	}
 }
 
 /*
@@ -352,15 +377,6 @@ function highlightKnight(i,j) {
 	helper(i+2,j+1);
 	helper(i-2,j-1);
 	helper(i-2,j+1);
-	/*
-		Function: helper
-		
-		Helper for <highlightKnight>.
-		
-		Paramaters:
-			i - I iterator of array
-			j - J iterator of array
-	*/
 	function helper(i,j) {
 		var enemyToken;
 		if (isWhite)
@@ -428,7 +444,32 @@ function highlightPawn(i,j) {
 		j - J iterator of array
 */
 function highlightQueen(i,j) {
-	
+	var enemyToken;
+	if (isWhite)
+		enemyToken = 'b';
+	else
+		enemyToken = 'w';
+	helper(i,j,1,1);
+	helper(i,j,-1,-1);
+	helper(i,j,-1,1);
+	helper(i,j,1,-1);
+	helper(i,j,1,0);
+	helper(i,j,-1,0);
+	helper(i,j,0,1);
+	helper(i,j,0,-1);
+	function helper(i,j,iMult,jMult) {
+		while (i >= 0 && i <= 7 && j <= 7 && j >= 0) {
+			i += 1*iMult;
+			j += 1*jMult;
+			if (i < 0 || i > 7 || j < 0 || j > 7)
+				break;
+			var tileToHighlight = lookupTile(2,i,j);
+			if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
+				highlight(i, j);
+			if (tileToHighlight.piece != 'ee')
+				break;
+		}
+	}
 }
 
 /*
@@ -441,7 +482,28 @@ function highlightQueen(i,j) {
 		j - J iterator of array
 */
 function highlightRook(i,j) {
-	
+	var enemyToken;
+	if (isWhite)
+		enemyToken = 'b';
+	else
+		enemyToken = 'w';
+	helper(i,j,1,0);
+	helper(i,j,-1,0);
+	helper(i,j,0,1);
+	helper(i,j,0,-1);
+	function helper(i,j,iMult,jMult) {
+		while (i >= 0 && i <= 7 && j <= 7 && j >= 0) {
+			i += 1*iMult;
+			j += 1*jMult;
+			if (i < 0 || i > 7 || j < 0 || j > 7)
+				break;
+			var tileToHighlight = lookupTile(2,i,j);
+			if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
+				highlight(i, j);
+			if (tileToHighlight.piece != 'ee')
+				break;
+		}
+	}
 }
 
 /*

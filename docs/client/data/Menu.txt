@@ -53,6 +53,5 @@ Group: Index  {
    Index: Everything
    File Index: Files
    Function Index: Functions
-   Method Index: Methods
    }  # Group: Index
 

@@ -72,7 +72,7 @@ Format: 1.52
 # their behavior or add keywords:
 #
 #    Generic, Class, Interface, Section, File, Group, Function, Variable,
-#    Property, Type, Constant, Enumeration, Event, Delegate, Method, Macro,
+#    Property, Type, Constant, Enumeration, Event, Delegate, Macro,
 #    Database, Database Table, Database View, Database Index, Database
 #    Cursor, Database Trigger, Cookie, Build Target
 

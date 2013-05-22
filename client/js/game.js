@@ -3,17 +3,76 @@
 	
 	All the logic for the client-side.  Requires the game.html file, jQuery, and Kinetic.js
 */
+
+/*
+	Variable: stage
+	
+	The game stage, used by KineticJS.
+*/
 var stage;
+/*
+	Variable: bgTileLayer
+	
+	The tiles that will be highlighted and are colored gray/white.
+*/
 var bgTileLayer;
+/*
+	Variable: pieceLayer
+	
+	Where the actual pieces are drawn.
+*/
 var pieceLayer;
+/*
+	Variable: fgTileLayer
+	
+	Where the tiles that detect clicks/hover and which provide borders are placed.
+*/
 var fgTileLayer;
 
 var isWhite;
 
+/*
+	Variable: socket
+	
+	The socket initialized and used by socket.io for communication to the server.
+*/
 var socket;
 
 var tileSize = 100;
 var boardSize = 800;
+
+/*
+	Variable: kingMoved
+	
+	Whether the king has been moved.
+*/
+var kingMoved = false;
+/*
+	Variable: rook1Moved
+	
+	Whether the rook at x = 0 has been moved.
+*/
+var rook1Moved = false;
+/*
+	Variable: rook2Moved
+	
+	Whether the rook at x = 7 has been moved.
+*/
+var rook2Moved = false;
+
+/*
+	Variable: pieces
+	
+	The object that holds all of the piece images.  Loaded by <loader>.
+*/
+var pieces = {black:{}, white:{}};
+/*
+	Variable: loaded
+	
+	Number of loaded elements.  Used primarily by <loader>.
+*/
+var loaded = 0;
+var elemToLoad = 12;
 
 /*
 	Function: initPage
@@ -22,10 +81,10 @@ var boardSize = 800;
 	
 	Global vars:
 	
-		stage - The game stage, used by KineticJS
-		bgTileLayer - The tiles that will be highlighted and are colored gray/white
-		pieceLayer - Where the actual pieces are drawn
-		fgTileLayer - Where the tiles that detect clicks/hover and which provide borders are placed
+		- <stage>
+		- <bgTileLayer>
+		- <pieceLayer>
+		- <fgTileLayer>
 */
 function initPage() {
 	stage = new Kinetic.Stage({
@@ -54,8 +113,6 @@ function initPage() {
 	Paramaters:
 	
 		board - The board to be drawn.
-	
-	
 */
 function drawBoard(board) {
 	if(loaded == elemToLoad) {
@@ -259,6 +316,7 @@ function move(i,j,piece) {
 	if ((piece.charAt(0) == 'b' && isWhite || piece.charAt(0) == 'w' && !isWhite) && !lookupTile(2,i,j).highlighted) {
 		return;
 	} else if (lookupTile(2,i,j).highlighted) {
+		handleSpecialMoveCheck(lookupTile(2,currSelectedPiece.i,currSelectedPiece.j),currSelectedPiece.i,currSelectedPiece.j);
 		socket.emit('move', {from: {x: currSelectedPiece.i, y: currSelectedPiece.j}, to: {x: i, y:j}, upgrade: false});
 		console.log( {from: {x: currSelectedPiece.i, y: currSelectedPiece.j}, to: {x: i, y:j}, upgrade: false});
 	} else if (currSelectedPiece.i == i && currSelectedPiece.j == j) {
@@ -288,6 +346,34 @@ function move(i,j,piece) {
 				highlightRook(i,j);
 				break;
 		}
+	}
+}
+
+/*
+	Function: handleSpecialMoveCheck
+	
+	Checks for various special moves to enable things like castling.  Called by <move>.
+	
+	Global vars:
+		- <kingMoved>
+		- <rook1Moved>
+		- <rook2Moved>
+*/
+function handleSpecialMoveCheck(tile,i,j) {
+	if (isWhite) {
+		if (tile.piece.charAt(1) == 'k')
+			kingMoved = true;
+		if (tile.piece.charAt(1) == 'r' && i == 0 && j == 0)
+			rook1Moved = true;
+		if (tile.piece.charAt(1) == 'r' && i == 7 && j == 0)
+			rook2Moved = true;
+	} else {
+		if (tile.piece.charAt(1) == 'k')
+			kingMoved = true;
+		if (tile.piece.charAt(1) == 'r' && i == 0 && j == 7)
+			rook1Moved = true;
+		if (tile.piece.charAt(1) == 'r' && i == 7 && j == 7)
+			rook2Moved = true;
 	}
 }
 
@@ -362,6 +448,8 @@ function highlightKing(i,j) {
 	helper(i,j,0,1);
 	helper(i,j,0,-1);
 	
+	castle(i,j);
+	
 	/*
 		Function: helper
 		
@@ -383,6 +471,63 @@ function highlightKing(i,j) {
 				highlight(i, j);
 			//if (tileToHighlight.piece != 'ee')
 		} 
+	}
+	
+	/*
+		Function: castle
+		
+		Handles castling highlighting.  Used in <highlightKing>.
+		
+		Paramaters:
+			i - I iterator of array
+			j - J iterator of array
+		
+		Global vars:
+			- <kingMoved>
+			- <rook1Moved>
+			- <rook2Moved>
+	*/
+	function castle(i,j) {
+		if (!kingMoved && (!rook1Moved || !rook2Moved)) {
+			if (!rook1Moved) {
+				if (isWhite) {
+					var occupied = false;
+					for (k = 1; k < 4 && !occupied; k++) {
+						if (lookupTile(2,i-k,j).piece != 'ee')
+							occupied = true;
+					}
+					if (!occupied)
+						highlight(i-2,j);
+				} else {
+					occupied = false;
+					for (k = 1; k < 4 && !occupied; k++) {
+						if (lookupTile(2,i-k,j).piece != 'ee')
+							occupied = true;
+					}
+					if (!occupied)
+						highlight(i-2,j);
+				}
+			}
+			if (!rook2Moved) {
+				if (isWhite) {
+					var occupied = false;
+					for (k = 1; k < 3 && !occupied; k++) {
+						if (lookupTile(2,i-k,j).piece != 'ee')
+							occupied = true;
+					}
+					if (!occupied)
+						highlight(i+2,j);
+				} else {
+					var occupied = false;
+					for (k = 1; k < 3 && !occupied; k++) {
+						if (lookupTile(2,i-k,j).piece != 'ee')
+							occupied = true;
+					}
+					if (!occupied)
+						highlight(i+2,j);
+				}
+			}
+		}
 	}
 }
 
@@ -632,7 +777,7 @@ function resetHighlight() {
 		
 	Global vars:
 		
-		socket - Socket used to send all game data
+		- <socket>
 */
 function connect(host, port) {
 	socket = io.connect('http://' + host + ':' + port, {reconnect: false});
@@ -646,7 +791,7 @@ function connect(host, port) {
 	
 	Global vars:
 	
-		socket - Socket used to send all game data
+		- <socket>
 */
 function listeners() {
 	//Connection event--currently no data passed
@@ -673,10 +818,6 @@ function listeners() {
 	});
 }
 
-var pieces = {black:{}, white:{}};
-var loaded = 0;
-var elemToLoad = 12;
-
 /*
 	Function: loader
 	
@@ -684,8 +825,8 @@ var elemToLoad = 12;
 	
 	Global vars:
 		
-		loaded - Number of loaded elements
-		pieces - The object that holds all of the piece images
+		- <loaded>
+		- <pieces>
 */
 function loader() {
 	pieces.black.bishop = new Image();

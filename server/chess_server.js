@@ -30,10 +30,10 @@ function Room() {
 		this.locboard[1][0] = new Piece('wh', {x:1,y:0});
 		this.board[2][0] = 'wb';
 		this.locboard[2][0] = new Piece('wb', {x:2,y:0});
-		this.board[3][0] = 'wq';
-		this.locboard[3][0] = new Piece('wq', {x:3,y:0});
-		this.board[4][0] = 'wk';
-		this.locboard[4][0] = new Piece('wk', {x:4,y:0});
+		this.board[3][0] = 'wk';
+		this.locboard[3][0] = new Piece('wk', {x:3,y:0});
+		this.board[4][0] = 'wq';
+		this.locboard[4][0] = new Piece('wq', {x:4,y:0});
 		this.board[5][0] = 'wb';
 		this.locboard[5][0] = new Piece('wb', {x:5,y:0});
 		this.board[6][0] = 'wh';

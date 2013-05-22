@@ -251,9 +251,9 @@ function move(i,j,piece) {
 	i = Number(i);
 	j = Number(j);
 	console.log(i,j,piece);
-	if (piece.charAt(0) == 'b' && isWhite || piece.charAt(0) == 'w' && !isWhite) {
+	if ((piece.charAt(0) == 'b' && isWhite || piece.charAt(0) == 'w' && !isWhite) && !lookupTile(2,i,j).highlighted) {
 		return;
-	} else if (lookupTile(2,i,j).highlighted == true) {
+	} else if (lookupTile(2,i,j).highlighted) {
 		socket.emit('move', {from: {x: currSelectedPiece.i, y: currSelectedPiece.j}, to: {x: i, y:j}, upgrade: false});
 	} else if (currSelectedPiece.i == i && currSelectedPiece.j == j) {
 		resetHighlight();
@@ -295,7 +295,61 @@ function move(i,j,piece) {
 		j - J iterator of array
 */
 function highlightBishop(i,j) {
-	
+	var enemyToken;
+	if (isWhite)
+		enemyToken = 'b';
+	else
+		enemyToken = 'w';
+	var currTile = {i:i,j:j};
+	console.log(i,j);
+	console.log(typeof(i), typeof(j));
+	while (currTile.i >= 0 && currTile.i <= 7 && currTile.j <= 7 && currTile.j >= 0) {
+		currTile.i += 1;
+		currTile.j += 1;
+		if(currTile.i < 0 || currTile.i > 7 || currTile.j < 0 || currTile.j > 7)
+			break;
+		var tileToHighlight = lookupTile(2,currTile.i,currTile.j);
+		if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
+			highlight(currTile.i, currTile.j);
+		if (tileToHighlight.piece != 'ee')
+			break;
+	}
+	currTile = {i:i,j:j};
+	while (currTile.i >= 0 && currTile.i <= 7 && currTile.j <= 7 && currTile.j >= 0) {
+		currTile.i += 1;
+		currTile.j -= 1;
+		if(currTile.i < 0 || currTile.i > 7 || currTile.j < 0 || currTile.j > 7)
+			break;
+		var tileToHighlight = lookupTile(2,currTile.i,currTile.j);
+		if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
+			highlight(currTile.i, currTile.j);
+		if (tileToHighlight.piece != 'ee')
+			break;
+	}
+	currTile = {i:i,j:j};
+	while (currTile.i >= 0 && currTile.i <= 7 && currTile.j <= 7 && currTile.j >= 0) {
+		currTile.i -= 1;
+		currTile.j += 1;
+		if(currTile.i < 0 || currTile.i > 7 || currTile.j < 0 || currTile.j > 7)
+			break;
+		var tileToHighlight = lookupTile(2,currTile.i,currTile.j);
+		if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
+			highlight(currTile.i, currTile.j);
+		if (tileToHighlight.piece != 'ee')
+			break;
+	}
+	currTile = {i:i,j:j};
+	while (currTile.i >= 0 && currTile.i <= 7 && currTile.j <= 7 && currTile.j >= 0) {
+		currTile.i -= 1;
+		currTile.j -= 1;
+		if(currTile.i < 0 || currTile.i > 7 || currTile.j < 0 || currTile.j > 7)
+			break;
+		var tileToHighlight = lookupTile(2,currTile.i,currTile.j);
+		if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
+			highlight(currTile.i, currTile.j);
+		if (tileToHighlight.piece != 'ee')
+			break;
+	}
 }
 
 /*
@@ -321,7 +375,36 @@ function highlightKing(i,j) {
 		j - J iterator of array
 */
 function highlightKnight(i,j) {
+	highlightKnightHelper(i+1,j-2);
+	highlightKnightHelper(i-1,j-2);
+	highlightKnightHelper(i+1,j+2);
+	highlightKnightHelper(i-1,j+2);
+	highlightKnightHelper(i+2,j-1);
+	highlightKnightHelper(i+2,j+1);
+	highlightKnightHelper(i-2,j-1);
+	highlightKnightHelper(i-2,j+1);
+}
+
+/*
+	Function: highlightKnightHelper
 	
+	Small snippet of reusable code to cut down on size.  Deos the actual highlighting after the coords are sent to it from <highlightKnight>.
+	
+	Paramaters:
+		i - I iterator of array
+		j - J iterator of array
+*/
+function highlightKnightHelper(i,j) {
+	var enemyToken;
+	if (isWhite)
+		enemyToken = 'b';
+	else
+		enemyToken = 'w';
+	if (i > -1 && i < 8 && j > -1 && j < 8) {
+		var newTile = lookupTile(2,i,j);
+		if (newTile.piece == 'ee' || newTile.piece.charAt(0) == enemyToken)
+			highlight(i, j);
+	}
 }
 
 /*

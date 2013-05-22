@@ -119,7 +119,10 @@ function drawBoard(board) {
 		clearBoard();
 		for (i in board) {
 			for (j in board[i]) {
-				drawTile(i, j, i*tileSize, j*tileSize, board[i][j]);
+				var y = j-3;
+				y *= -1;
+				y += 4;
+				drawTile(i, j, i*tileSize, y*tileSize, board[i][j]);
 			}
 		}
 		stage.draw();

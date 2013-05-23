@@ -87,11 +87,22 @@ var elemToLoad = 12;
 		- <fgTileLayer>
 */
 function initPage() {
+	if (window.innerHeight < window.innerWidth)
+		boardSize = window.innerHeight;
+	else
+		boardSize = window.innerWidth;
+	tileSize = boardSize/8;
+	$('#game').css('width', boardSize + 'px');
+	$('#game').css('height', boardSize + 'px');
 	stage = new Kinetic.Stage({
 		height: boardSize,
 		width: boardSize,
 		container: 'game'
 	});
+	document.getElementById('game').scrollIntoView();
+	//var position = $("game").position();
+	//scroll(0,position.top);
+	
 	bgTileLayer = new Kinetic.Layer();
 	pieceLayer = new Kinetic.Layer();
 	fgTileLayer = new Kinetic.Layer();

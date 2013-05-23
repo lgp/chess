@@ -38,6 +38,13 @@ var isWhite;
 */
 var socket;
 
+/*
+	Variable: board
+	
+	The board sent by the last update event.
+*/
+var board;
+
 var tileSize = 100;
 var boardSize = 800;
 
@@ -87,11 +94,20 @@ var elemToLoad = 12;
 		- <fgTileLayer>
 */
 function initPage() {
+	if (window.innerHeight < window.innerWidth)
+		boardSize = window.innerHeight;
+	else
+		boardSize = window.innerWidth;
+	tileSize = boardSize/8;
+	$('#game').css('width', boardSize + 'px');
+	$('#game').css('height', boardSize + 'px');
 	stage = new Kinetic.Stage({
 		height: boardSize,
 		width: boardSize,
 		container: 'game'
 	});
+	window.location.href = '#game';
+	
 	bgTileLayer = new Kinetic.Layer();
 	pieceLayer = new Kinetic.Layer();
 	fgTileLayer = new Kinetic.Layer();
@@ -103,6 +119,20 @@ function initPage() {
 	loader();
 	
 	connect('localhost', '8080');
+	
+	$(window).resize(function() {
+		if (window.innerHeight < window.innerWidth)
+		boardSize = window.innerHeight;
+		else
+			boardSize = window.innerWidth;
+		tileSize = boardSize/8;
+		$('#game').css('width', boardSize + 'px');
+		$('#game').css('height', boardSize + 'px');
+		stage.setHeight(boardSize);
+		stage.setWidth(boardSize);
+		drawBoard(board);
+		window.location.href = '#game';
+	});
 }
 
 /*
@@ -127,7 +157,6 @@ function drawBoard(board) {
 		}
 		stage.draw();
 	} else {
-		console.log('here');
 		window.setTimeout(function() {drawBoard(board)}, 1000);
 	}
 }
@@ -799,7 +828,6 @@ function connect(host, port) {
 function listeners() {
 	//Connection event--currently no data passed
 	socket.on('connect', function() {
-		alert("You've been connected");
 	});
 	
 	//Sets colors
@@ -812,6 +840,7 @@ function listeners() {
 	
 	//Updates board from server
 	socket.on('update', function(data) {
+		board = data;
 		drawBoard(data);
 	});
 	

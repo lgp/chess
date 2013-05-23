@@ -21,3 +21,7 @@ body {
 	border: 4px black double;
 	margin: 0 auto;
 }
+
+#game {
+	margin: 0 auto;
+}

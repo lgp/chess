@@ -1,0 +1,16 @@
+doctype 5
+html
+	head
+		title LGP Chess - #{title}
+		link(rel='stylesheet', href='/css/site.css')
+		link(rel='shortcut icon', href='/img/site/faviconNoBg.ico')
+	body
+		#logo
+			img(src='/img/site/logoSmooth.png', alt='LGP Chess')
+		#container
+			block content
+		#signIn
+			a.btn(href='/login') Sign in
+		script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js')
+		script(src='lib/kinetic-v4.5.1.min.js')
+		script(src='http://localhost:8080/socket.io/socket.io.js')

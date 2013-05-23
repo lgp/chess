@@ -373,7 +373,7 @@ io.on('connection', function(socket) {
 	var color = room.colors.pop();
 	socket.emit('color', {color: color});
 	socket.set('color', color, function(){});
-	socket.emit('update', room.board);
+	socket.emit('update', {board: room.board, color: room.turn});
 	
 	socket.on('move', function(data) {
 		var fx = data.from.x, fy = data.from.y;
@@ -390,10 +390,10 @@ io.on('connection', function(socket) {
 				}
 			}
 			else {
-				console.log('NOT PLAYERS TURN: ' + room.color);
+				console.log('NOT PLAYERS TURN: ' + room.turn);
 				socket.emit('badMove');
 			}
-			io.sockets.emit('update', room.board);
+			io.sockets.emit('update', {board: room.board, color: room.turn});
 			room.print();
 		});
 	});

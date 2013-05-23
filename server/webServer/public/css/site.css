@@ -36,4 +36,12 @@ body {
   border: 1px solid #000;
   text-decoration: none;
   color: #000;
+  margin: 2px;
+}
+.padded {
+  padding: 15px;
+}
+/* OpenID login widget */
+#openid_form {
+  margin: 0 auto;
 }

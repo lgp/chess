@@ -14,6 +14,7 @@ Thumbs.db
 mongoose.conf
 mongoose-3.7.exe
 
-# Files with LGP specific information #
-#######################################
-facebook.private.js
+# Node.js #
+###########
+node_modules
+npm-debug.log

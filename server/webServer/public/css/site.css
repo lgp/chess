@@ -13,6 +13,9 @@ body {
   margin: 0 auto;
   text-align: center;
 }
+#game {
+  margin: 0 auto;
+}
 #container {
   width: 800px;
   background: #fff;

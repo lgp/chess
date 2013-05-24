@@ -404,7 +404,7 @@ function listeners() {
 	
 	//Updates board from server
 	socket.on('update', function(data) {
-		drawBoard(data);
+		drawBoard(data.board);
 	});
 	
 	//Bad move handler

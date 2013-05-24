@@ -1,8 +1,6 @@
-var io = require('socket.io').listen(8080);
+var sockio = require('socket.io');
+var room;
 
-
-var room = new Room();
-room.init();
 
 function checkLoc (list, loc) {
 	for(var i=0; i<list.length; i++)
@@ -368,33 +366,45 @@ function Piece(type, initloc) {
 	this.getMoves();
 }
 
-io.on('connection', function(socket) {
-	if(room.colors.length == 0) socket.disconnect();
-	var color = room.colors.pop();
-	socket.emit('color', {color: color});
-	socket.set('color', color, function(){});
-	socket.emit('update', {board: room.board, color: room.turn});
-	
-	socket.on('move', function(data) {
-		var fx = data.from.x, fy = data.from.y;
-		socket.get('color', function(err, color) {
-			console.log(color);
-			if(color === room.turn) {
-				if(data.upgrade !== false) {
-					room.locboard[fx][fy].upgrade(data.upgrade);
-				}
-				else {
-					console.log('attempting move of: ' + room.locboard[fx][fy].type + '[' + fx + ']' + '[' + fy + '] to: [' + data.to.x + ']' + '[' + data.to.y + ']');
-					if(room.locboard[fx][fy].move(data.to)) console.log('moved');
-					else socket.emit('badMove');
-				}
-			}
-			else {
-				console.log('NOT PLAYERS TURN: ' + room.turn);
-				socket.emit('badMove');
-			}
-			io.sockets.emit('update', {board: room.board, color: room.turn});
-			room.print();
+
+exports.start = function(app) {
+	try {
+		var io = sockio.listen(app);
+		room = new Room();
+		room.init();
+		io.on('connection', function(socket) {
+			if(room.colors.length == 0) socket.disconnect();
+			var color = room.colors.pop();
+			socket.emit('color', {color: color});
+			socket.set('color', color, function(){});
+			socket.emit('update', {board: room.board, color: room.turn});
+			
+			socket.on('move', function(data) {
+				var fx = data.from.x, fy = data.from.y;
+				socket.get('color', function(err, color) {
+					console.log(color);
+					if(color === room.turn) {
+						if(data.upgrade !== false) {
+							room.locboard[fx][fy].upgrade(data.upgrade);
+						}
+						else {
+							console.log('attempting move of: ' + room.locboard[fx][fy].type + '[' + fx + ']' + '[' + fy + '] to: [' + data.to.x + ']' + '[' + data.to.y + ']');
+							if(room.locboard[fx][fy].move(data.to)) console.log('moved');
+							else socket.emit('badMove');
+						}
+					}
+					else {
+						console.log('NOT PLAYERS TURN: ' + room.turn);
+						socket.emit('badMove');
+					}
+					io.sockets.emit('update', {board: room.board, color: room.turn});
+					room.print();
+				});
+			});
 		});
-	});
-});
+	}
+	catch(err) {
+		console.log('failed to start:' + err);
+	}
+}
+

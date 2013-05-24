@@ -9,7 +9,10 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , passport = require('passport')
-  , OpenIDStrategy = require('passport-openid').Strategy;
+  , OpenIDStrategy = require('passport-openid').Strategy
+  , chess = require('../chess_server.js');
+
+chess.start(8080);
 
 var app = express();
 

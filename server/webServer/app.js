@@ -10,9 +10,8 @@ var express = require('express')
   , path = require('path')
   , passport = require('passport')
   , OpenIDStrategy = require('passport-openid').Strategy
-  , chess = require('../chess_server.js');
-
-chess.start(8080);
+  , chess = require('../chess_server.js')
+  , http = require('http');
 
 var app = express();
 
@@ -25,8 +24,8 @@ passport.deserializeUser(function(identifier, done) {
 });
 
 passport.use(new OpenIDStrategy({
-		returnURL: 'http://localhost:3000/auth/openid/return',
-		realm: 'http://localhost:3000/'
+		returnURL: 'http://localhost:8080/auth/openid/return',
+		realm: 'http://localhost:8080/'
 	},
 	function(identifier, done) {
 		// asynchronous verification, for effect...
@@ -37,7 +36,7 @@ passport.use(new OpenIDStrategy({
 ));
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8080);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -93,7 +92,7 @@ app.get('/logout', function(req, res){
 	res.redirect('/');
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app).listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
 
@@ -101,3 +100,5 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login')
 }
+
+chess.start(server);

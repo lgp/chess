@@ -118,7 +118,7 @@ function initPage() {
 	
 	loader();
 	
-	connect('server.manic0892.com', '8080');
+	connect('localhost', '8080');
 	
 	$(window).resize(function() {
 		if (window.innerHeight < window.innerWidth)

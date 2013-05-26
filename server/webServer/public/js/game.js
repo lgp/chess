@@ -333,12 +333,34 @@ function drawFGTile(i,j,x,y,piece) {
 /*
 	Function: clearBoard
 	
-	Clears all the layers so that the board can be redrawn
+	Clears all the layers so that the board can be redrawn.
 */
 function clearBoard() {
 	bgTileLayer.removeChildren();
 	pieceLayer.removeChildren();
 	fgTileLayer.removeChildren();
+}
+
+/*
+	Function: drawTurn
+	
+	Tells the player whose turn it is.
+	
+	Paramaters:
+	
+		color - The color sent in the update event
+*/
+function drawTurn(color) {
+	var yourTurn = "It is your turn.";
+	var blackTurn = "It is black's turn.";
+	var whiteTurn = "It is white's turn.";
+	if (color == 'white') {
+		if (isWhite) $('#turn').text(yourTurn);
+		else $('#turn').text(whiteTurn);
+	} else {
+		if (isWhite) $('#turn').text(blackTurn);
+		else $('#turn').text(yourTurn);
+	}
 }
 
 var currSelectedPiece = {i:null,j:null};
@@ -864,6 +886,7 @@ function listeners() {
 	socket.on('update', function(data) {
 		board = data.board;
 		drawBoard(data.board);
+		drawTurn(data.color);
 	});
 	
 	//Bad move handler

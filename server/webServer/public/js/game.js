@@ -82,6 +82,19 @@ var loaded = 0;
 var elemToLoad = 12;
 
 /*
+	Variable: emptyColor
+	
+	The RGBA color that is used to highlight empty squares, in string form.
+*/
+var emptyColor = 'rgba(212,250,250,0.8)';
+/*
+	Variable: enemyColor
+	
+	The RGBA color that is used to highlight enemy squares, in string form.
+*/
+var enemyColor = 'rgba(225,0,0,0.8)';
+
+/*
 	Function: initPage
 	
 	Initializes the page, including instantiating the stage and layers.  Called in the $(document).ready() function.
@@ -419,11 +432,6 @@ function handleSpecialMoveCheck(tile,i,j) {
 		j - J iterator of array
 */
 function highlightBishop(i,j) {
-	var enemyToken;
-	if (isWhite)
-		enemyToken = 'b';
-	else
-		enemyToken = 'w';
 	helper(i,j,1,1);
 	helper(i,j,-1,-1);
 	helper(i,j,-1,1);
@@ -441,16 +449,22 @@ function highlightBishop(i,j) {
 			jMult - Direction of diagonal
 	*/
 	function helper(i,j,iMult,jMult) {
-		while (i >= 0 && i <= 7 && j <= 7 && j >= 0) {
+		var enemyToken = getEnemyToken();
+		done = false;
+		while (i >= 0 && i <= 7 && j <= 7 && j >= 0 && !done) {
 			i += 1*iMult;
 			j += 1*jMult;
 			if (i < 0 || i > 7 || j < 0 || j > 7)
 				break;
 			var tileToHighlight = lookupTile(2,i,j);
 			if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
-				highlight(i, j);
-			if (tileToHighlight.piece != 'ee')
-				break;
+				highlight(i, j, true);
+			if (tileToHighlight.piece != 'ee') {
+				if (tileToHighlight.piece.charAt(0) == enemyToken)
+					highlight(i,j,false);
+				else
+					done = true;
+			}
 		}
 	}
 }
@@ -465,12 +479,6 @@ function highlightBishop(i,j) {
 		j - J iterator of array
 */
 function highlightKing(i,j) {
-	var enemyToken;
-	if (isWhite)
-		enemyToken = 'b';
-	else
-		enemyToken = 'w';
-		
 	helper(i,j,1,1);
 	helper(i,j,-1,-1);
 	helper(i,j,-1,1);
@@ -494,14 +502,16 @@ function highlightKing(i,j) {
 			dj - Direction to travel
 	*/
 	function helper(i,j,di,dj) {
+		var enemyToken = getEnemyToken();
 		i += di;
 		j += dj;
 		if (i < 0 || i > 7 || j < 0 || j > 7) {
 		} else {
 			var tileToHighlight = lookupTile(2,i,j);
-			if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
-				highlight(i, j);
-			//if (tileToHighlight.piece != 'ee')
+			if (tileToHighlight.piece == 'ee')
+				highlight(i, j, true);
+			else if (tileToHighlight.piece.charAt(0) == enemyToken)
+				highlight(i,j,false);;
 		} 
 	}
 	
@@ -529,7 +539,7 @@ function highlightKing(i,j) {
 							occupied = true;
 					}
 					if (!occupied)
-						highlight(i-2,j);
+						highlight(i-2,j,true);
 				} else {
 					occupied = false;
 					for (k = 1; k < 4 && !occupied; k++) {
@@ -537,7 +547,7 @@ function highlightKing(i,j) {
 							occupied = true;
 					}
 					if (!occupied)
-						highlight(i-2,j);
+						highlight(i-2,j,true);
 				}
 			}
 			if (!rook2Moved) {
@@ -548,7 +558,7 @@ function highlightKing(i,j) {
 							occupied = true;
 					}
 					if (!occupied)
-						highlight(i+2,j);
+						highlight(i+2,j,true);
 				} else {
 					var occupied = false;
 					for (k = 1; k < 3 && !occupied; k++) {
@@ -556,7 +566,7 @@ function highlightKing(i,j) {
 							occupied = true;
 					}
 					if (!occupied)
-						highlight(i+2,j);
+						highlight(i+2,j,true);
 				}
 			}
 		}
@@ -592,15 +602,13 @@ function highlightKnight(i,j) {
 			j - J iterator of array of square to highlight
 	*/
 	function helper(i,j) {
-		var enemyToken;
-		if (isWhite)
-			enemyToken = 'b';
-		else
-			enemyToken = 'w';
+		var enemyToken = getEnemyToken();
 		if (i > -1 && i < 8 && j > -1 && j < 8) {
 			var newTile = lookupTile(2,i,j);
-			if (newTile.piece == 'ee' || newTile.piece.charAt(0) == enemyToken)
-				highlight(i, j);
+			if (newTile.piece == 'ee')
+				highlight(i, j,true);
+			if (newTile.piece.charAt(0) == enemyToken)
+				highlight(i,j,false);
 		}
 	}
 }
@@ -618,32 +626,32 @@ function highlightPawn(i,j) {
 	if (isWhite) {
 		if (j < 7) {
 			if (lookupTile(2,i,j+1).piece == 'ee')
-				highlight(i,j+1);
+				highlight(i,j+1,true);
 			if (i < 7) {
 				if (lookupTile(2,i+1,j+1).piece.charAt(0) == 'b')
-					highlight(i+1,j+1);
+					highlight(i+1,j+1,false);
 			}
 			if (i > 0) {
 				if (lookupTile(2,i-1,j+1).piece.charAt(0) == 'b')
-					highlight(i-1,j+1);
+					highlight(i-1,j+1,false);
 			}
 			if (j == 1 && lookupTile(2,i,j+2).piece == 'ee')
-				highlight(i,j+2);
+				highlight(i,j+2,true);
 		}
 	} else {
 		if (j > 0) {
 			if (lookupTile(2,i,j-1).piece == 'ee')
-				highlight(i,j-1);
+				highlight(i,j-1,true);
 			if (i < 7) {
 				if (lookupTile(2,i+1,j-1).piece.charAt(0) == 'w')
-					highlight(i+1,j-1);
+					highlight(i+1,j-1,false);
 			}
 			if (i > 0) {
 				if (lookupTile(2,i-1,j-1).piece.charAt(0) == 'w')
-					highlight(i-1,j-1);
+					highlight(i-1,j-1,false);
 			}
 			if (j == 6 && lookupTile(2,i,j-2).piece == 'ee')
-				highlight(i,j-2);
+				highlight(i,j-2,true);
 		}
 	}
 }
@@ -658,11 +666,6 @@ function highlightPawn(i,j) {
 		j - J iterator of array
 */
 function highlightQueen(i,j) {
-	var enemyToken;
-	if (isWhite)
-		enemyToken = 'b';
-	else
-		enemyToken = 'w';
 	helper(i,j,1,1);
 	helper(i,j,-1,-1);
 	helper(i,j,-1,1);
@@ -684,15 +687,18 @@ function highlightQueen(i,j) {
 			jMult - Direction of diagonal
 	*/
 	function helper(i,j,iMult,jMult) {
+		var enemyToken = getEnemyToken();
 		while (i >= 0 && i <= 7 && j <= 7 && j >= 0) {
 			i += 1*iMult;
 			j += 1*jMult;
 			if (i < 0 || i > 7 || j < 0 || j > 7)
 				break;
 			var tileToHighlight = lookupTile(2,i,j);
-			if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
-				highlight(i, j);
-			if (tileToHighlight.piece != 'ee')
+			if (tileToHighlight.piece == 'ee')
+				highlight(i, j, true);
+			if (tileToHighlight.piece.charAt(0) == enemyToken)
+				highlight(i,j,false);
+			if (tileToHighlight.piece != 'ee' && tileToHighlight.piece.charAt(0) != enemyToken)
 				break;
 		}
 	}
@@ -708,11 +714,6 @@ function highlightQueen(i,j) {
 		j - J iterator of array
 */
 function highlightRook(i,j) {
-	var enemyToken;
-	if (isWhite)
-		enemyToken = 'b';
-	else
-		enemyToken = 'w';
 	helper(i,j,1,0);
 	helper(i,j,-1,0);
 	helper(i,j,0,1);
@@ -730,14 +731,17 @@ function highlightRook(i,j) {
 			dj - Direction to travel
 	*/
 	function helper(i,j,iMult,jMult) {
+		var enemyToken = getEnemyToken();
 		while (i >= 0 && i <= 7 && j <= 7 && j >= 0) {
 			i += 1*iMult;
 			j += 1*jMult;
 			if (i < 0 || i > 7 || j < 0 || j > 7)
 				break;
 			var tileToHighlight = lookupTile(2,i,j);
-			if (tileToHighlight.piece == 'ee' || tileToHighlight.piece.charAt(0) == enemyToken)
-				highlight(i, j);
+			if (tileToHighlight.piece == 'ee')
+				highlight(i, j, true);
+			if (tileToHighlight.piece.charAt(0) == enemyToken)
+				highlight(i,j,false);
 			if (tileToHighlight.piece != 'ee')
 				break;
 		}
@@ -752,12 +756,30 @@ function highlightRook(i,j) {
 	Paramaters:
 		i - I iterator of array
 		j - J iterator of array
+		isEmpty - If the square is empty or not
 */
-function highlight(i,j) {
+function highlight(i,j,isEmpty) {
+	var highlightColor;
+	if (isEmpty)
+		highlightColor = emptyColor;
+	else
+		highlightColor = enemyColor;
 	var tileToHighlight = lookupTile(2,i,j);
-	tileToHighlight.setFill('rgba(212,250,250,0.8)');
+	tileToHighlight.setFill(highlightColor);
 	tileToHighlight.highlighted = true;
 	fgTileLayer.draw();
+}
+
+/*
+	Function: getEnemyToken
+	
+	Passes back the enemy token as a one-character string.
+*/
+function getEnemyToken() {
+	if (isWhite)
+		return enemyToken = 'b';
+	else
+		return enemyToken = 'w';
 }
 
 /*

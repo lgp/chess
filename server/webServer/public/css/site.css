@@ -50,6 +50,14 @@ body {
 .padded {
   padding: 15px;
 }
+.scrollLink {
+  position: absolute;
+  top: 10;
+  left: 10;
+  display: none;
+  text-decoration: none;
+  color: #808080;
+}
 /* OpenID login widget */
 #openid_form {
   margin: 0 auto;

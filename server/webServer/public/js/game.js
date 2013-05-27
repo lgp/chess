@@ -134,6 +134,7 @@ function initPage() {
 	connect('localhost', '8080');
 	
 	$(window).resize(function() {
+		clearScrollLink();
 		if (window.innerHeight < window.innerWidth)
 		boardSize = window.innerHeight;
 		else
@@ -942,6 +943,35 @@ function loader() {
 	}
 }
 
+/*
+	Function: scrollHandler
+	
+	Handles scroll event--called whenever the window is scrolled.  Mostly used to tell whether to display the scroll link.
+*/
+function scrollHandler() {
+	var currYOffset = window.pageYOffset;
+	var gameOffset = 161;
+	$('.scrollLink').css('top',(currYOffset+10)+'px');
+	if (currYOffset > gameOffset) {
+		$('#scrollDown').css('display', 'none');
+		$('#scrollUp').css('display', 'inline');
+	} else if (currYOffset < gameOffset) {
+		$('#scrollUp').css('display', 'none');
+		$('#scrollDown').css('display', 'inline');
+	} else {
+		clearScrollLink();
+	}
+}
+
+function clearScrollLink() {
+	$('.scrollLink').css('display', 'none');
+}
+
 window.onload = function() {
 	initPage();
 };
+
+window.onscroll = function() {
+	console.log('hi');
+	scrollHandler();
+}

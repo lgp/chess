@@ -822,6 +822,8 @@ function lookupTile(layer,i,j) {
 
 /*
 	Function: resetHighlight
+	
+	Resets the highlight so that a new piece can be highlighted.
 */
 function resetHighlight() {
 	for (i in fgTileLayer.children) {

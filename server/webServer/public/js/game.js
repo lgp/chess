@@ -134,18 +134,7 @@ function initPage() {
 	connect('localhost', '8080');
 	
 	$(window).resize(function() {
-		clearScrollLink();
-		if (window.innerHeight < window.innerWidth)
-		boardSize = window.innerHeight;
-		else
-			boardSize = window.innerWidth;
-		tileSize = boardSize/8;
-		$('#game').css('width', boardSize + 'px');
-		$('#game').css('height', boardSize + 'px');
-		stage.setHeight(boardSize);
-		stage.setWidth(boardSize);
-		drawBoard(board);
-		window.location.href = '#game';
+		
 	});
 }
 
@@ -963,8 +952,33 @@ function scrollHandler() {
 	}
 }
 
+/*
+	Function: clearScrollLink
+	
+	Sets .scrollLink to display: none.  Renders the scroll links invisible.  Mostly used by <scrollHandler>.
+*/
 function clearScrollLink() {
 	$('.scrollLink').css('display', 'none');
+}
+
+/*
+	Function: resizeHandler
+	
+	Handles the resizing of the window.  Resizes the board to fill the screen and scrolls to it.
+*/
+function resizeHandler() {
+	clearScrollLink();
+	if (window.innerHeight < window.innerWidth)
+		boardSize = window.innerHeight;
+	else
+		boardSize = window.innerWidth;
+	tileSize = boardSize/8;
+	$('#game').css('width', boardSize + 'px');
+	$('#game').css('height', boardSize + 'px');
+	stage.setHeight(boardSize);
+	stage.setWidth(boardSize);
+	drawBoard(board);
+	window.location.href = '#game';
 }
 
 window.onload = function() {
@@ -972,6 +986,9 @@ window.onload = function() {
 };
 
 window.onscroll = function() {
-	console.log('hi');
 	scrollHandler();
-}
+};
+
+window.onresize = function() {
+	resizeHandler();
+};

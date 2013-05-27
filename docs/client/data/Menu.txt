@@ -46,7 +46,7 @@ Format: 1.52
 # --------------------------------------------------------------------------
 
 
-File: game.js  (js/game.js)
+File: game.js  (game.js)
 
 Group: Index  {
 

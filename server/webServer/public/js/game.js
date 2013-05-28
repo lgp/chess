@@ -342,15 +342,15 @@ function clearBoard() {
 		color - The color sent in the update event
 */
 function drawTurn(color) {
-	var yourTurn = "It is your turn.";
-	var blackTurn = "It is black's turn.";
-	var whiteTurn = "It is white's turn.";
+	var yourTurn = "It is<br><span class='turnMainHeading'>your turn</span>";
+	var blackTurn = "It is<br><span class='turnMainHeading'>black's turn</span>";
+	var whiteTurn = "It is<br><span class='turnMainHeading'>white's turn</span>";
 	if (color == 'white') {
-		if (isWhite) $('#turn').text(yourTurn);
-		else $('#turn').text(whiteTurn);
+		if (isWhite) $('#turn').html(yourTurn);
+		else $('#turn').html(whiteTurn);
 	} else {
-		if (isWhite) $('#turn').text(blackTurn);
-		else $('#turn').text(yourTurn);
+		if (isWhite) $('#turn').html(blackTurn);
+		else $('#turn').html(yourTurn);
 	}
 }
 

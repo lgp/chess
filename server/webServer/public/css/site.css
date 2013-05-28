@@ -59,7 +59,13 @@ body {
   display: inline-block;
   vertical-align: middle;
 }
-#turn,
+#turn {
+  text-align: center;
+}
+.turnMainHeading {
+  font-size: 30px;
+  text-transform: uppercase;
+}
 .toolbarContent {
   vertical-align: middle;
 }

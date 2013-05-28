@@ -51,6 +51,7 @@ File: game.js  (game.js)
 Group: Index  {
 
    Index: Everything
+   Class Index: Classes
    File Index: Files
    Function Index: Functions
    Variable Index: Variables

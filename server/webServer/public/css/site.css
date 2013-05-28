@@ -48,6 +48,7 @@ body {
   display: none;
   text-decoration: none;
   color: #808080;
+  z-index: 1;
 }
 #gameWrapper {
   margin: 0 auto;

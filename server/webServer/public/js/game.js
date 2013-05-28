@@ -102,6 +102,26 @@ var enemyColor = 'rgba(225,0,0,0.8)';
 var totalToolbarWidth = 300;
 
 /*
+	Variable: totalTimer
+	
+	The timer of the entire game.
+*/
+var totalTimer;
+
+/*
+	Variable: whiteTimer
+	
+	White timer to see how long they've been taking on turns.
+*/
+var whiteTimer;
+
+/*
+	Variable: blackTimer
+	
+	Black timer to see how long they've been taking on turns.
+*/
+
+/*
 	Function: initPage
 	
 	Initializes the page, including instantiating the stage and layers.  Called in the $(document).ready() function.
@@ -1006,3 +1026,37 @@ window.onscroll = function() {
 window.onresize = function() {
 	resizeHandler();
 };
+
+/*
+	Class: Timer
+	
+	Used to time the entire game time and invidividual player times.  Since this is used solely by the client, this does not really pave the way for speed chess.
+	
+	Paramaters:
+		
+		container - The container div that the draw method should draw to.
+*/
+function Timer() {
+	this.time = -1;
+	this.start = function() {
+		var self = this;
+		this.interval = window.setInterval(function() {
+			self.time++;
+			if (self.time%1000 == 0) {
+				this.draw();
+			}
+		}, 1);
+	}
+	this.stop = function() {
+		window.clearInterval(this.interval);
+	}
+	/*
+		Function: draw
+		
+		Used to draw the current time to the document.
+	*/
+	this.draw = function() {
+		
+	}
+	
+}

@@ -164,7 +164,7 @@ function initPage() {
 	whiteTimer = new Timer('#whiteTimer');
 	blackTimer = new Timer('#blackTimer');
 	
-	totalTimer.start();
+	totalTimer.draw();
 	whiteTimer.draw();
 	blackTimer.draw();
 }
@@ -899,6 +899,7 @@ function connect(host, port) {
 function listeners() {
 	//Connection event--currently no data passed
 	socket.on('connect', function() {
+		totalTimer.start();
 	});
 	
 	//Sets colors

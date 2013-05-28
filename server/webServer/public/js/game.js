@@ -5,6 +5,12 @@
 */
 
 /*
+	Class: Global
+	
+	This is basically all the data for the game itself.  These functions are not in a separate class/library since this is single-use code.  This should be modified for any future projects.
+*/
+
+/*
 	Variable: stage
 	
 	The game stage, used by KineticJS.

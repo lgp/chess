@@ -95,6 +95,13 @@ var emptyColor = 'rgba(212,250,250,0.8)';
 var enemyColor = 'rgba(225,0,0,0.8)';
 
 /*
+	Variable: totalToolbarWidth
+	
+	The width of the two toolbars (#leftToolbar and #rightToolbar)
+*/
+var totalToolbarWidth = 300;
+
+/*
 	Function: initPage
 	
 	Initializes the page, including instantiating the stage and layers.  Called in the $(document).ready() function.
@@ -107,13 +114,7 @@ var enemyColor = 'rgba(225,0,0,0.8)';
 		- <fgTileLayer>
 */
 function initPage() {
-	if (window.innerHeight < window.innerWidth)
-		boardSize = window.innerHeight;
-	else
-		boardSize = window.innerWidth;
-	tileSize = boardSize/8;
-	$('#game').css('width', boardSize + 'px');
-	$('#game').css('height', boardSize + 'px');
+	resize();
 	stage = new Kinetic.Stage({
 		height: boardSize,
 		width: boardSize,
@@ -969,17 +970,29 @@ function clearScrollLink() {
 */
 function resizeHandler() {
 	clearScrollLink();
-	if (window.innerHeight < window.innerWidth)
-		boardSize = window.innerHeight;
-	else
-		boardSize = window.innerWidth;
-	tileSize = boardSize/8;
-	$('#game').css('width', boardSize + 'px');
-	$('#game').css('height', boardSize + 'px');
+	resize();
 	stage.setHeight(boardSize);
 	stage.setWidth(boardSize);
 	drawBoard(board);
 	window.location.href = '#game';
+}
+
+/*
+	Function: resize
+	
+	Handles the actual resizing, since the same code is used by <initPage> and <resizeHandler>.
+*/
+function resize() {
+	if (window.innerHeight < window.innerWidth+totalToolbarWidth)
+		boardSize = window.innerHeight;
+	else
+		boardSize = window.innerWidth-totalToolbarWidth;
+	tileSize = boardSize/8;
+	$('#game').css('width', boardSize + 'px');
+	$('#game').css('height', boardSize + 'px');
+	$('#gameWrapper').css('width', boardSize+totalToolbarWidth+ 'px');
+	$('#gameWrapper').css('height', boardSize+'px');
+	$('.toolbar').css('height', boardSize + 'px');
 }
 
 window.onload = function() {

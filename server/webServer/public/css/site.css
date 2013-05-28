@@ -13,15 +13,6 @@ body {
   margin: 0 auto;
   text-align: center;
 }
-#game {
-  margin: 0 auto;
-  position: relative;
-}
-#turn {
-  position: absolute;
-  left: -200px;
-  top: 0;
-}
 #container {
   width: 800px;
   background: #fff;
@@ -57,6 +48,25 @@ body {
   display: none;
   text-decoration: none;
   color: #808080;
+}
+#gameWrapper {
+  margin: 0 auto;
+  vertical-align: middle;
+}
+#game {
+  margin: 0 auto;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+#turn,
+.toolbarContent {
+  vertical-align: middle;
+}
+.toolbar {
+  width: 150px;
+  display: inline-block;
+  vertical-align: middle;
 }
 /* OpenID login widget */
 #openid_form {

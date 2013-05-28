@@ -160,9 +160,13 @@ function initPage() {
 	
 	connect('localhost', '8080');
 	
-	$(window).resize(function() {
-		
-	});
+	totalTimer = new Timer('#totalTimer');
+	whiteTimer = new Timer('#whiteTimer');
+	blackTimer = new Timer('#blackTimer');
+	
+	totalTimer.start();
+	whiteTimer.draw();
+	blackTimer.draw();
 }
 
 /*
@@ -374,9 +378,13 @@ function drawTurn(color) {
 	if (color == 'white') {
 		if (isWhite) $('#turn').html(yourTurn);
 		else $('#turn').html(whiteTurn);
+		blackTimer.stop();
+		whiteTimer.start();
 	} else {
 		if (isWhite) $('#turn').html(blackTurn);
 		else $('#turn').html(yourTurn);
+		whiteTimer.stop();
+		blackTimer.start();
 	}
 }
 

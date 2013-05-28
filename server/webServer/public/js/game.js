@@ -942,7 +942,6 @@ function loader() {
 function scrollHandler() {
 	var currYOffset = window.pageYOffset;
 	var gameOffset = 161;
-	$('.scrollLink').css('top',(currYOffset+10)+'px');
 	if (currYOffset > gameOffset) {
 		$('#scrollDown').css('display', 'none');
 		$('#scrollUp').css('display', 'inline');

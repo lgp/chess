@@ -1042,16 +1042,15 @@ window.onresize = function() {
 		
 		container - The container div that the draw method should draw to.
 */
-function Timer() {
-	this.time = -1;
+function Timer(container) {
+	this.container = container;
+	this.time = 0;
 	this.start = function() {
 		var self = this;
 		this.interval = window.setInterval(function() {
 			self.time++;
-			if (self.time%1000 == 0) {
-				this.draw();
-			}
-		}, 1);
+			self.draw();
+		}, 1000);
 	}
 	this.stop = function() {
 		window.clearInterval(this.interval);
@@ -1062,7 +1061,19 @@ function Timer() {
 		Used to draw the current time to the document.
 	*/
 	this.draw = function() {
+		var seconds = Math.floor(this.time);
+		var minutes = Math.floor(seconds/60);
+		seconds = seconds%60;
+		minutes = pad(minutes,2);
+		seconds = pad(seconds,2);
+		$(container).text(minutes + ':' + seconds);
 		
+		function pad(number, length) {
+			var str = '' + number;
+			while (str.length < length)
+				str = '0' + str;
+			return str;
+		}
 	}
 	
 }

@@ -86,3 +86,16 @@ body {
 #openid_form {
   margin: 0 auto;
 }
+/* SimpleModal styling */
+#simplemodal-overlay {
+  background-color: #000;
+}
+#simplemodal-container {
+  background-color: #fff7c2;
+  border: 8px solid #f90;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  padding: 12px;
+  color: #000;
+}

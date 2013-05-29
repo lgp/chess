@@ -442,6 +442,23 @@ function move(i,j,piece) {
 }
 
 /*
+	Function: upgrade
+	
+	Handles upgrading pawns when they cross the board.
+	
+	Paramaters:
+	
+		piece - Piece to upgrade the pawn to.  Set to false if this is the triggering of the modal.
+*/
+function upgrade(piece) {
+	if (!piece) {
+		$('#upgradeModal').modal({overlayClose:true});
+	} else {
+		socket.emit('move', {from: {x: currSelectedPiece.i, y: currSelectedPiece.j}, to: {x: i, y:j}, upgrade: piece});
+	}
+}
+
+/*
 	Function: handleSpecialMoveCheck
 	
 	Checks for various special moves to enable things like castling.  Called by <move>.

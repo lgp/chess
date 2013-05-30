@@ -388,7 +388,7 @@ function drawTurn(color) {
 	}
 }
 
-var currSelectedPiece = {i:null,j:null};
+var currSelectedPiece = {i:null,j:null, piece: null};
 
 /*
 	Function: move
@@ -408,9 +408,7 @@ function move(i,j,piece) {
 	if ((piece.charAt(0) == 'b' && isWhite || piece.charAt(0) == 'w' && !isWhite) && !lookupTile(2,i,j).highlighted) {
 		return;
 	} else if (lookupTile(2,i,j).highlighted) {
-		handleSpecialMoveCheck(lookupTile(2,currSelectedPiece.i,currSelectedPiece.j),currSelectedPiece.i,currSelectedPiece.j);
-		socket.emit('move', {from: {x: currSelectedPiece.i, y: currSelectedPiece.j}, to: {x: i, y:j}, upgrade: false});
-		console.log( {from: {x: currSelectedPiece.i, y: currSelectedPiece.j}, to: {x: i, y:j}, upgrade: false});
+		handleSpecialMoveCheck(lookupTile(2,currSelectedPiece.i,currSelectedPiece.j),i,j);
 	} else if (currSelectedPiece.i == i && currSelectedPiece.j == j) {
 		resetHighlight();
 		currSelectedPiece = {i:null, j:null};
@@ -418,6 +416,7 @@ function move(i,j,piece) {
 		resetHighlight();
 		currSelectedPiece.i = i;
 		currSelectedPiece.j = j;
+		currSelectedPiece.piece = piece;
 		switch(piece.charAt(1)) {
 			case 'b':
 				highlightBishop(i,j);
@@ -451,10 +450,12 @@ function move(i,j,piece) {
 		piece - Piece to upgrade the pawn to.  Set to false if this is the triggering of the modal.
 */
 function upgrade(piece) {
+	console.log(piece);
 	if (!piece) {
 		$('#upgradeModal').modal({overlayClose:true});
 	} else {
 		socket.emit('move', {from: {x: currSelectedPiece.i, y: currSelectedPiece.j}, to: {x: i, y:j}, upgrade: piece});
+		$.modal.close();
 	}
 }
 
@@ -469,20 +470,32 @@ function upgrade(piece) {
 		- <rook2Moved>
 */
 function handleSpecialMoveCheck(tile,i,j) {
+	//console.log(tile,i,j,currSelectedPiece);
 	if (isWhite) {
-		if (tile.piece.charAt(1) == 'k')
-			kingMoved = true;
-		if (tile.piece.charAt(1) == 'r' && i == 0 && j == 0)
-			rook1Moved = true;
-		if (tile.piece.charAt(1) == 'r' && i == 7 && j == 0)
-			rook2Moved = true;
+		if (lookupTile(2,i,j).piece.charAt(0) != 'w' && j == 7 && currSelectedPiece.piece.charAt(1) == 'p') {
+			console.log('in here');
+			upgrade(false);
+		} else {
+			if (tile.piece.charAt(1) == 'k')
+				kingMoved = true;
+			if (tile.piece.charAt(1) == 'r' && currSelectedPiece.i == 0 && currSelectedPiece.j == 0)
+				rook1Moved = true;
+			if (tile.piece.charAt(1) == 'r' && currSelectedPiece.i == 7 && currSelectedPiece.j == 0)
+				rook2Moved = true;
+			socket.emit('move', {from: {x: currSelectedPiece.i, y: currSelectedPiece.j}, to: {x: i, y:j}, upgrade: false});
+		}
 	} else {
-		if (tile.piece.charAt(1) == 'k')
-			kingMoved = true;
-		if (tile.piece.charAt(1) == 'r' && i == 0 && j == 7)
-			rook1Moved = true;
-		if (tile.piece.charAt(1) == 'r' && i == 7 && j == 7)
-			rook2Moved = true;
+		if (lookupTile(2,i,j).piece.charAt(0) == 'b' && j == 0 && currSelectedPiece.piece.charAt(1) == 'p') {
+			upgrade(false);
+		} else {
+			if (tile.piece.charAt(1) == 'k')
+				kingMoved = true;
+			if (tile.piece.charAt(1) == 'r' && currSelectedPiece.i == 0 && currSelectedPiece.j == 7)
+				rook1Moved = true;
+			if (tile.piece.charAt(1) == 'r' && currSelectedPiece.i == 7 && currSelectedPiece.j == 7)
+				rook2Moved = true;
+			socket.emit('move', {from: {x: currSelectedPiece.i, y: currSelectedPiece.j}, to: {x: i, y:j}, upgrade: false});
+		}
 	}
 }
 

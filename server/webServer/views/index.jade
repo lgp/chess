@@ -18,7 +18,11 @@ block content
 				#blackTimer.timer
 		#game
 		#rightToolbar.toolbar
-	#upgradeModal(style='display:none') alskdfjaslkfjaslkdjflasdjflakjdf
+	#upgradeModal(style='display:none')
+		button(onclick='upgrade("q")') Queen
+		button(onclick='upgrade("r")') Rook
+		button(onclick='upgrade("b")') Bishop
+		button(onclick='upgrade("h")') Knight
 
 block scripts
 	script(src='js/game.js')

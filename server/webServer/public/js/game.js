@@ -539,8 +539,7 @@ function highlightBishop(i,j) {
 			if (tileToHighlight.piece != 'ee') {
 				if (tileToHighlight.piece.charAt(0) == enemyToken)
 					highlight(i,j,false);
-				else
-					done = true;
+				done = true;
 			}
 		}
 	}
